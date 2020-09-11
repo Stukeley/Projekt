@@ -10,7 +10,7 @@ Projekt PK
 ## Co działa
 1. iloscWierzcholkow - zwraca poprawną ilość
 2. iloscPolaczen - zwraca poprawną ilość
-3. wczytajWierzcholki - wczytuje poprawnie, ale zwraca tylko ostatni element tablicy (np. "F1" zamiast całej tablicy {"A1", "B1", ...}
+3. wczytajWierzcholki - wczytuje poprawnie, ale zwraca tylko ostatni element tablicy (np. "F1" zamiast całej tablicy {"A1", "B1", ...})
 
 ## Co nie działa
 1. wczytajPolaczenia - być może coś jest nie tak połączeniem stringów w jedno
@@ -21,3 +21,5 @@ Projekt PK
 1. zwalnianie pamięci - chcę żeby najpierw działało
 2. zapisywanie do pliku - myślę, że to najmniejszy problem
 3. wykorzystanie listy wierzchołków z polecenia - póki co chcę żeby działało chociaż dla 2 dowolnych wierzchołków
+
+Addendum: myślę, że format pliku nie ma aż takiego znaczenia. Nie mam zbyt wysokich oczekiwań co do tego projektu. Załóżmy, że każdy wierzchołek grafu to osobna linia w pliku .txt, a każde połączenie kończy się średnikiem.
