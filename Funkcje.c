@@ -237,7 +237,7 @@ void inicjalizacja(char* nazwaPliku)
 
 		while (p != NULL)
 		{
-			if (p->nazwa == first)
+			if (strcmp(p->nazwa,first) == 0)
 			{
 				if (p->polaczenie == NULL)
 				{
@@ -245,7 +245,7 @@ void inicjalizacja(char* nazwaPliku)
 
 					struct wierzcholek* p2 = head;
 
-					while (second != p2->nazwa)
+					while (strcmp(second, p2->nazwa) != 0)
 					{
 						p2 = p2->nastepny;
 					}
@@ -263,7 +263,7 @@ void inicjalizacja(char* nazwaPliku)
 
 					struct wierzcholek* p2 = head;
 
-					while (second != p2->nazwa)
+					while (strcmp(second, p2->nazwa) != 0)
 					{
 						p2 = p2->nastepny;
 					}
@@ -373,7 +373,7 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* nazwaPoczatkowa, char*
 
 	while (wPoczatkowy != NULL)
 	{
-		if (wPoczatkowy->nazwa == nazwaDocelowa)
+		if (strcmp(wPoczatkowy->nazwa,nazwaDocelowa) == 0)
 		{
 			temp = wPoczatkowy;
 			lacznyKoszt = wPoczatkowy->koszt;
@@ -385,7 +385,7 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* nazwaPoczatkowa, char*
 
 	while (temp->poprzedni != NULL)
 	{
-		if (temp->poprzedni->nazwa == nazwaPoczatkowa)
+		if (strcmp(temp->poprzedni->nazwa,nazwaPoczatkowa) == 0)
 		{
 			break;
 		}
