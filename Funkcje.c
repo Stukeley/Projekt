@@ -166,6 +166,8 @@ char** wczytajPolaczenia(char* nazwaPliku)
 
 				polaczenia[licznik] = (char*)malloc(11 * sizeof(char));
 
+				// Docelowy format dla kazdego indeksu w tablicy: W1_W2_koszt
+
 				char* polaczenie = strcat(pierwszy, "_");
 				polaczenie = strcat(polaczenie, drugi);
 				polaczenie = strcat(polaczenie, "_");
@@ -175,6 +177,8 @@ char** wczytajPolaczenia(char* nazwaPliku)
 			}
 		}
 	}
+
+	fclose(plik);
 
 	// Powinno zwrocic np. { "A1_B1_1", "A1_C1_2", ... }
 	return polaczenia;
@@ -192,6 +196,7 @@ void inicjalizacja(char* nazwaPliku)
 	struct wierzcholek* p, *head;
 	
 	p = malloc(sizeof(struct wierzcholek));
+	head = NULL;
 
 	// Inicjalizacja listy wierzcholkow
 

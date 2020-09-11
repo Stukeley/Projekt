@@ -33,6 +33,8 @@ int main(int argc, char* argv[])
 	int ileWierzcholkow = iloscWierzcholkow(wejscie);
 	int ilePolaczen = iloscPolaczen(wejscie);
 
+	char** polaczenia = wczytajPolaczenia(wejscie);
+
 	// Inicjalizacja listy
 	inicjalizacja(wejscie);
 

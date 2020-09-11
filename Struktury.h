@@ -1,3 +1,6 @@
+/**
+ * @file
+ */
 #pragma once
 
 /** Lista jednokierunkowa polaczen wychodzacych z danego wierzcholka. Kazdy wierzcholek ma liste polaczen z niego wychodzacych.
