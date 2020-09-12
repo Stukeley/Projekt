@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 	char* wejscie = NULL;
 	char* wyjscie = NULL;
 
-	int* wierzcholki;//?
+	//int* wierzcholki;	//?
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -33,7 +33,9 @@ int main(int argc, char* argv[])
 	int ileWierzcholkow = iloscWierzcholkow(wejscie);
 	int ilePolaczen = iloscPolaczen(wejscie);
 
-	char** polaczenia = wczytajPolaczenia(wejscie);
+	char* wierzcholki = wczytajWierzcholki(wejscie);
+
+	char* polaczenia = wczytajPolaczenia(wejscie);
 
 	// Inicjalizacja listy
 	inicjalizacja(wejscie);

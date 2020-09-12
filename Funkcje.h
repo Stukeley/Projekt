@@ -7,17 +7,17 @@
 #include <stdio.h>
 #include <string.h>
 
-/** Wczytuje wierzcholki z pliku wejsciowego o podanej nazwie jako tablica napisow
+/** Wczytuje wierzcholki z pliku wejsciowego o podanej nazwie jako jeden napis
 * @param nazwaPliku Napis zawierajacy nazwe pliku wejsciowego
-* @return Tablica napisow, gdzie kazdy napis to nazwa jednego wierzcholka
+* @return Napis zawierajacy wszystkie wierzcholki oddzielone przecinkami, np. A1,B1,C1,D1
 */
-char** wczytajWierzcholki(char* nazwaPliku);
+char* wczytajWierzcholki(char* nazwaPliku);
 
-/** Wczytuje polaczenia z pliku wejsciowego o podanej nazwie jako tablica napisow
+/** Wczytuje polaczenia z pliku wejsciowego o podanej nazwie jako jeden napis
 * @param nazwaPliku Napis zawierajacy nazwe pliku wejsciowego
-* @return Tablica napisow, gdzie kazdy napis zawiera jedno polaczenie: W1_W2_koszt
+* @return Napis zawierajacy wszystkie polaczenia oddzielone przecinkami, np. A1_B1_1, A1_C1_2
 */
-char** wczytajPolaczenia(char* nazwaPliku);
+char* wczytajPolaczenia(char* nazwaPliku);
 
 /** Zlicza ilosc wierzcholkow w pliku (tylko pierwszy element w kazdym wierszu)
 * @param nazwaPliku Napis zawierajacy nazwe pliku wejsciowego

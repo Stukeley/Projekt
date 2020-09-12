@@ -1,6 +1,5 @@
 #include "Funkcje.h"
 
-// to nie do konca jest poprawne - moga byc wierzcholki ktore nie maja polaczen
 int iloscWierzcholkow(char* nazwaPliku)
 {
 	FILE* plik = fopen(nazwaPliku, "r");
@@ -75,7 +74,7 @@ int iloscPolaczen(char* nazwaPliku)
 	return iloscPol;
 }
 
-char** wczytajWierzcholki(char* nazwaPliku)
+char* wczytajWierzcholki(char* nazwaPliku)
 {
 	int ilosc = iloscWierzcholkow(nazwaPliku);
 
@@ -87,31 +86,35 @@ char** wczytajWierzcholki(char* nazwaPliku)
 		return NULL;
 	}
 
-	// Tworzenie tablicy wyjsciowej o rozmiarze ilosc
+	// Tworzenie napisu wyjsciowego o rozmiarze 3 * ilosc + 1 (kazdy wierzcholek to 2 znaki + przecinek + jeden znak konca napisu)
 
-	char** wierzcholki = (char**)malloc(ilosc * sizeof(char*));
+	char* wierzcholki = (char*)malloc((3 * ilosc + 1) * sizeof(char));
 
-	// Buffer dla funkcji fgets
+	// Buffer dla funkcji fgets (60 - maksymalny rozmiar pojedynczej linii)
 	char str[60];
+
+	// Indeks odpowiedzialny za poprawna konstrukcje napisu
+	int indeks = 0;
 
 	for (int i = 0; i < ilosc; i++)
 	{
 		char* linia = fgets(str, 60, plik);
 
-		// Zakladamy ze maksymalna dlugosc nazwy to 2, np. A1
-		wierzcholki[i] = (char*) malloc(3 * sizeof(char));
-
 		// Wczytujemy z pliku tylko nazwe wierzcholka, np. A1
-		wierzcholki[i] = strtok(linia, ":");
+		char* nazwaW = strtok(linia, ":");
+
+		wierzcholki[indeks++] = nazwaW[0];
+		wierzcholki[indeks++] = nazwaW[1];
+		wierzcholki[indeks++] = ',';
 	}
 
 	fclose(plik);
 
-	// Powinno zwrocic np. { "A1", "B1", "C1", "D1", "E1", "F1" }
+	// Powinno zwrocic np. "A1,B1,C1,D1"
 	return wierzcholki;
 }
 
-char** wczytajPolaczenia(char* nazwaPliku)
+char* wczytajPolaczenia(char* nazwaPliku)
 {
 	int ilosc = iloscPolaczen(nazwaPliku);
 
@@ -123,64 +126,70 @@ char** wczytajPolaczenia(char* nazwaPliku)
 		return NULL;
 	}
 
-	// Tworzenie tablicy wyjsciowej o rozmiarze ilosc (kazdy indeks bedzie jednym polaczeniem)
+	// Tworzenie napisu wyjsciowego o rozmiarze 13 * ilosc + 1 (2 wierzcholki * 2 znaki + 4 cyfry kosztu + 2 podkreslenia + przecinek na kazde polaczenie + jeden znak konca napisu)
 
-	char** polaczenia = (char**)malloc(ilosc*sizeof(char*));
+	char* polaczenia = (char*)malloc((13 * ilosc + 1) * sizeof(char));
 
-	int licznik = 0;
+	// Indeks odpowiedzialny za poprawna konstrukcje napisu
+	int indeks = 0;
 
 	// Buffer dla funkcji fgets
 	char str[60];
 
-	char* linia;
-
-	while ((linia = fgets(str, 60, plik))!=NULL)
+	for (int i = 0; i < ilosc; i++)
 	{
-		// Naglowek linii - pierwszy wierzcholek polaczony ("first")
-		char* pierwszy = strtok(linia, ':');
+		char* linia = fgets(str, 60, plik);
 
-		for (int i = 0; i < strlen(linia); i++)
+		int rozmiarLinii = strlen(linia);
+
+		// Naglowek linii - pierwszy wierzcholek polaczony ("first")
+		char* pierwszy = strtok(linia, ":");
+
+		for (int j = 0; j < rozmiarLinii; j++)
 		{
-			if (linia[i] == ' ')
+			if (linia[j] == ' ')
 			{
 				// Drugi polaczony wierzcholek - zakladamy ze zawsze max 2 znaki (np. A1)
-				char* drugi = linia[i + 1] + linia[i + 2];
+				char* drugi = linia[j + 1] + linia[j + 2];
 
 				// Zakldamy ze koszt to maksymalnie 4-cyfrowa liczba
-				char* koszt[4];
+				char* koszt[5];
 
-				int k = 0;
+				int x = 0;
 
-				for (int j = i + 3; j < strlen(linia); j++)
+				for (int k = j + 3; k < rozmiarLinii; k++)
 				{
-					if (linia[j] == ' ')
+					if (linia[k] == ' ')
 					{
-						i = j;
+						j = k;
 						break;
 					}
 					else
 					{
-						koszt[k++] = linia[j];
+						koszt[x++] = linia[k];
 					}
 				}
+				
+				// Tworzenie poprawnego formatu napisu
 
-				polaczenia[licznik] = (char*)malloc(11 * sizeof(char));
-
-				// Docelowy format dla kazdego indeksu w tablicy: W1_W2_koszt
-
-				char* polaczenie = strcat(pierwszy, "_");
-				polaczenie = strcat(polaczenie, drugi);
-				polaczenie = strcat(polaczenie, "_");
-				polaczenie = strcat(polaczenie, koszt);
-
-				polaczenia[licznik] = polaczenie;
+				polaczenia[indeks++] = pierwszy[0];
+				polaczenia[indeks++] = pierwszy[1];
+				polaczenia[indeks++] = '_';
+				polaczenia[indeks++] = drugi[0];
+				polaczenia[indeks++] = drugi[1];
+				polaczenia[indeks++] = '_';
+				
+				for (int s = 0; s < x; s++)
+				{
+					polaczenia[indeks++] = koszt[s];
+				}
 			}
 		}
 	}
 
 	fclose(plik);
 
-	// Powinno zwrocic np. { "A1_B1_1", "A1_C1_2", ... }
+	// Powinno zwrocic np. "A1_B1_1,A1_C1_2,..."
 	return polaczenia;
 }
 
@@ -189,9 +198,9 @@ void inicjalizacja(char* nazwaPliku)
 	int n = iloscWierzcholkow(nazwaPliku);
 	int k = iloscPolaczen(nazwaPliku);
 
-	char** wierzcholki = wczytajWierzcholki(nazwaPliku);
+	char* wierzcholki = wczytajWierzcholki(nazwaPliku);
 
-	char** polaczenia = wczytajPolaczenia(nazwaPliku);
+	char* polaczenia = wczytajPolaczenia(nazwaPliku);
 
 	struct wierzcholek* p, *head;
 	
