@@ -143,7 +143,7 @@ char* wczytajPolaczenia(char* nazwaPliku)
 	{
 		char* linia = fgets(str, 60, plik);
 
-		char* tempLinia = (char*)malloc(3*sizeof(char));
+		char* tempLinia = (char*)malloc(60*sizeof(char));
 
 		strcpy(tempLinia, linia);
 
@@ -157,10 +157,9 @@ char* wczytajPolaczenia(char* nazwaPliku)
 			if (linia[j] == ' ')
 			{
 				// Drugi polaczony wierzcholek - zakladamy ze zawsze max 2 znaki (np. A1)
-				char* drugi = (char*)malloc(3 * sizeof(char));
+				char drugi[3];
 				drugi[0] = linia[j + 1];
 				drugi[1] = linia[j + 2];
-
 				
 				// Zakldamy ze koszt to maksymalnie 4-cyfrowa liczba
 				char koszt[5];
@@ -196,8 +195,6 @@ char* wczytajPolaczenia(char* nazwaPliku)
 				}
 
 				polaczenia[indeks++] = ',';
-
-				free(drugi);
 			}
 		}
 	}
