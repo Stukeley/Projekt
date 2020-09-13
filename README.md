@@ -10,10 +10,10 @@ Projekt PK
 ## Co działa
 1. iloscWierzcholkow - zwraca poprawną ilość
 2. iloscPolaczen - zwraca poprawną ilość
-3. wczytajWierzcholki - wczytuje poprawnie, ale zwraca tylko ostatni element tablicy (np. "F1" zamiast całej tablicy {"A1", "B1", ...})
+3. wczytajWierzcholki - wczytuje poprawnie, zwraca jeden napis
 
 ## Co nie działa
-1. wczytajPolaczenia - Access Violation podczas modyfikacji linii z pliku (sama linia jest wczytana poprawnie); być może coś jest też nie tak połączeniem stringów w jedno
+1. wczytajPolaczenia - problem ze stertą podczas wczytywania (po kilku przejściach pętli, gdy napis zwracany jest już częściowo zapełniony)
 2. inicjalizacja - powinno tworzyć początkową listę wierzchołków oraz listy połączeń i zapisywać wskaźnik na pierwszy element do zmiennej Wierzcholek (w deklaracji struktury)
 3. dijkstra - powinno wypisać do konsoli ścieżkę oraz łączny koszt.
 
