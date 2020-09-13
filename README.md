@@ -11,11 +11,11 @@ Projekt PK
 1. iloscWierzcholkow - zwraca poprawną ilość
 2. iloscPolaczen - zwraca poprawną ilość
 3. wczytajWierzcholki - wczytuje poprawnie, zwraca jeden napis
+4. wczytajPolaczenia - wczytuje poprawnie, zwraca jeden napis
 
 ## Co nie działa
-1. wczytajPolaczenia - problem ze stertą podczas wczytywania (po kilku przejściach pętli, gdy napis zwracany jest już częściowo zapełniony)
-2. inicjalizacja - powinno tworzyć początkową listę wierzchołków oraz listy połączeń i zapisywać wskaźnik na pierwszy element do zmiennej Wierzcholek (w deklaracji struktury)
-3. dijkstra - powinno wypisać do konsoli ścieżkę oraz łączny koszt.
+1. inicjalizacja - powinno tworzyć początkową listę wierzchołków oraz listy połączeń i zapisywać wskaźnik na pierwszy element do zmiennej Wierzcholek (w deklaracji struktury)
+2. dijkstra - powinno wypisać do konsoli ścieżkę oraz łączny koszt.
 
 ## Co póki co nie jest zaimplementowane
 1. zwalnianie pamięci - chcę żeby najpierw działało
