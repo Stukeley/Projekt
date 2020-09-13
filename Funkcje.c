@@ -108,6 +108,8 @@ char* wczytajWierzcholki(char* nazwaPliku)
 		wierzcholki[indeks++] = ',';
 	}
 
+	wierzcholki[indeks] = '\0';
+
 	fclose(plik);
 
 	// Powinno zwrocic np. "A1,B1,C1,D1"
@@ -116,7 +118,8 @@ char* wczytajWierzcholki(char* nazwaPliku)
 
 char* wczytajPolaczenia(char* nazwaPliku)
 {
-	int ilosc = iloscPolaczen(nazwaPliku);
+	int iloscW = iloscWierzcholkow(nazwaPliku);
+	int iloscP = iloscPolaczen(nazwaPliku);
 
 	FILE* plik = fopen(nazwaPliku, "r");
 
@@ -128,7 +131,7 @@ char* wczytajPolaczenia(char* nazwaPliku)
 
 	// Tworzenie napisu wyjsciowego o rozmiarze 13 * ilosc + 1 (2 wierzcholki * 2 znaki + 4 cyfry kosztu + 2 podkreslenia + przecinek na kazde polaczenie + jeden znak konca napisu)
 
-	char* polaczenia = (char*)malloc((13 * ilosc + 1) * sizeof(char));
+	char* polaczenia = (char*)malloc((13 * iloscP + 1) * sizeof(char));
 
 	// Indeks odpowiedzialny za poprawna konstrukcje napisu
 	int indeks = 0;
@@ -136,30 +139,37 @@ char* wczytajPolaczenia(char* nazwaPliku)
 	// Buffer dla funkcji fgets
 	char str[60];
 
-	for (int i = 0; i < ilosc; i++)
+	for (int i = 0; i < iloscW; i++)
 	{
 		char* linia = fgets(str, 60, plik);
 
-		int rozmiarLinii = strlen(linia);
+		char* tempLinia = (char*)malloc(3*sizeof(char));
+
+		strcpy(tempLinia, linia);
 
 		// Naglowek linii - pierwszy wierzcholek polaczony ("first")
-		char* pierwszy = strtok(linia, ":");
+		char* pierwszy = strtok(tempLinia, ":");
+
+		int rozmiarLinii = strlen(linia);
 
 		for (int j = 0; j < rozmiarLinii; j++)
 		{
 			if (linia[j] == ' ')
 			{
 				// Drugi polaczony wierzcholek - zakladamy ze zawsze max 2 znaki (np. A1)
-				char* drugi = linia[j + 1] + linia[j + 2];
+				char* drugi = (char*)malloc(3 * sizeof(char));
+				drugi[0] = linia[j + 1];
+				drugi[1] = linia[j + 2];
 
+				
 				// Zakldamy ze koszt to maksymalnie 4-cyfrowa liczba
-				char* koszt[5];
+				char koszt[5];
 
 				int x = 0;
 
-				for (int k = j + 3; k < rozmiarLinii; k++)
+				for (int k = j + 4; k < rozmiarLinii; k++)
 				{
-					if (linia[k] == ' ')
+					if (linia[k] == ';')
 					{
 						j = k;
 						break;
@@ -169,20 +179,25 @@ char* wczytajPolaczenia(char* nazwaPliku)
 						koszt[x++] = linia[k];
 					}
 				}
-				
-				// Tworzenie poprawnego formatu napisu
 
+				// Tworzenie poprawnego formatu napisu
 				polaczenia[indeks++] = pierwszy[0];
 				polaczenia[indeks++] = pierwszy[1];
 				polaczenia[indeks++] = '_';
+
 				polaczenia[indeks++] = drugi[0];
 				polaczenia[indeks++] = drugi[1];
 				polaczenia[indeks++] = '_';
+
 				
 				for (int s = 0; s < x; s++)
 				{
 					polaczenia[indeks++] = koszt[s];
 				}
+
+				polaczenia[indeks++] = ',';
+
+				free(drugi);
 			}
 		}
 	}
