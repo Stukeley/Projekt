@@ -6,6 +6,7 @@
 #include "Struktury.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /** Wczytuje wierzcholki z pliku wejsciowego o podanej nazwie jako jeden napis
 * @param nazwaPliku Napis zawierajacy nazwe pliku wejsciowego
@@ -34,9 +35,9 @@ int iloscPolaczen(char* nazwaPliku);
 
 /** Inicjalizuje liste wierzcholkow nazwana Wierzcholek (w definicji struktury)
 * @param nazwaPliku Napis zawierajacy nazwe pliku wejsciowego
-* @note Po wykonaniu tej funkcji, zmienna Wierzcholek (w deklaracji struktury) powinna wskazywac na pierwszy element listy jednokierunkowej wierzcholkow
+* @note Po wykonaniu tej funkcji, zmienna Wierzcholek (w deklaracji struktury) powinna wskazywac na pierwszy element listy dwukierunkowej wierzcholkow
 */
-void inicjalizacja(char* nazwaPliku);
+void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy);
 
 /** Wykorzustujac algorytm Dijkstry wyznacza najbardziej korzystne drogi z wierzcholka do pozostalych
 * @param ileWierzcholkow Ilosc wierzcholkow, znaleziona za pomoca funkcji iloscWierzcholkow
@@ -45,7 +46,7 @@ void inicjalizacja(char* nazwaPliku);
 * @param nazwaDocelowa Nazwa wierzcholka, do ktorego chcemy sie poruszyc (np. D1)
 * @param wyjscie Napis zawierajacy nazwe pliku wyjsciowego
 */
-void dijkstra(int ileWierzcholkow, int ilePolaczen, char* nazwaPoczatkowa, char* nazwaDocelowa, char* wyjscie);
+void dijkstra(int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie);
 
 /** Wypisuje do pliku wyjsciowego o podanej nazwie sciezke oraz laczny koszt
 * @note TODO

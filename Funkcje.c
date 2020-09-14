@@ -205,7 +205,7 @@ char* wczytajPolaczenia(char* nazwaPliku)
 	return polaczenia;
 }
 
-void inicjalizacja(char* nazwaPliku)
+void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy)
 {
 	int n = iloscWierzcholkow(nazwaPliku);
 	int k = iloscPolaczen(nazwaPliku);
@@ -214,12 +214,17 @@ void inicjalizacja(char* nazwaPliku)
 
 	char* polaczenia = wczytajPolaczenia(nazwaPliku);
 
-	struct wierzcholek* p, *head;
+	struct wierzcholek *p, *head;
 	
 	p = malloc(sizeof(struct wierzcholek));
 	head = NULL;
 
+	// Odpowiedzialny za wyciaganie odpowiednich nazw z napisu wierzcholki
+	int indeksNazwy = 0;
+
 	// Inicjalizacja listy wierzcholkow
+
+	//! Blad: head wskazuje na to samo co p (ostatni element), zamiast na pierwszy
 
 	for (int i = 0; i < n; i++)
 	{
@@ -233,28 +238,87 @@ void inicjalizacja(char* nazwaPliku)
 			p = p->nastepny;
 		}
 
-		p->nazwa = wierzcholki[i];
-		p->koszt = 9999;	// poczatkowo ustawiamy bardzo duza wartosc, ale pozniej bedzie ona modyfikowana
+		//poprawne nazwy z napisow (i polaczenia)
+		char nazwaW[3];
+		int i = 0;
+
+		while (wierzcholki[indeksNazwy] != ',')
+		{
+			nazwaW[i++] = wierzcholki[indeksNazwy++];
+		}
+
+		nazwaW[i] = '\0';
+
+		indeksNazwy++;
+
+		p->nazwa = nazwaW;
 		p->odwiedzony = false;
 		p->poprzedni = NULL;
 		p->polaczenie = NULL;
 		p->nastepny = NULL;
+
+		// Jezeli wczytywany wierzcholek jest poczatkowym, to koszt jest rowny zero; w innym przypadku, koszt jest bardzo duzy (ale bedzie potem modyfikowany przez algorytm D)
+		if (strcmp(nazwaW, wierzcholekPoczatkowy) == 0)
+		{
+			p->koszt = 0;
+		}
+		else
+		{
+			p->koszt = 9999;
+		}
+		
 	}
 
+	// W tym miejscu mamy liste wierzcholkow, np. A1->B1->C1->...
+
 	// Inicjalizacja list polaczen dla kazdego wierzcholka
+
+	// Odpowiedzialny za wyciaganie odpowiednich nazw pierwszego i drugiego wierzcholka oraz kosztu, dla kazdego polaczenia
+	int indeksPolaczenia = 0;
 
 	for (int i = 0; i < k; i++)
 	{
 		p = head;
 
-		char* first = (char*)malloc(sizeof(char) * 11);
-		char* second = (char*)malloc(sizeof(char) * 11);
-		int* value = (int*)malloc(sizeof(int));
+		char first[3];	// Pierwszy wierzcholek polaczony, np. A1
+		char second[3];	// Drugi wierzcholek polaczony, np. B1
+		char valueChar[5];	// Napis bedacy kosztem poruszenia sie z first do second
+		int value;	// Koszt jako liczba
 
-		// TODO: dla kazdego polaczenia w tablicy "polaczenia" (np. "A1_B1_1")
-		// first: pierwszy wierzcholek, A1
-		// second: drugi wierzcholek, B1
-		// value: koszt, 1
+		int i = 0;
+
+		// Wczytywanie nazw
+
+		while (polaczenia[indeksPolaczenia] != '_')
+		{
+			first[i++] = polaczenia[indeksPolaczenia++];
+		}
+
+		first[i] = '\0';
+
+		indeksPolaczenia++;
+		i = 0;
+
+		while (polaczenia[indeksPolaczenia] != '_')
+		{
+			second[i++] = polaczenia[indeksPolaczenia++];
+		}
+
+		second[i] = '\0';
+
+		indeksPolaczenia++;
+		i = 0;
+
+		while (polaczenia[indeksPolaczenia] != ',')
+		{
+			valueChar[i++] = polaczenia[indeksPolaczenia++];
+		}
+
+		valueChar[i] = '\0';
+
+		indeksPolaczenia++;
+		value = atoi(valueChar);
+
 
 		while (p != NULL)
 		{
@@ -264,7 +328,7 @@ void inicjalizacja(char* nazwaPliku)
 				{
 					p->polaczenie = malloc(sizeof(struct polaczenie));
 
-					struct wierzcholek* p2 = head;
+					struct wierzcholek *p2 = head;
 
 					while (strcmp(second, p2->nazwa) != 0)
 					{
@@ -306,7 +370,7 @@ void inicjalizacja(char* nazwaPliku)
 	Wierzcholek = head;
 }
 
-void dijkstra(int ileWierzcholkow, int ilePolaczen, char* nazwaPoczatkowa, char* nazwaDocelowa, char* wyjscie)
+void dijkstra(int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie)
 {
 	struct wierzcholek* pp = Wierzcholek;
 
@@ -394,7 +458,7 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* nazwaPoczatkowa, char*
 
 	while (wPoczatkowy != NULL)
 	{
-		if (strcmp(wPoczatkowy->nazwa,nazwaDocelowa) == 0)
+		if (strcmp(wPoczatkowy->nazwa,wierzcholekDocelowy) == 0)
 		{
 			temp = wPoczatkowy;
 			lacznyKoszt = wPoczatkowy->koszt;
@@ -406,7 +470,7 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* nazwaPoczatkowa, char*
 
 	while (temp->poprzedni != NULL)
 	{
-		if (strcmp(temp->poprzedni->nazwa,nazwaPoczatkowa) == 0)
+		if (strcmp(temp->poprzedni->nazwa,wierzcholekPoczatkowy) == 0)
 		{
 			break;
 		}
@@ -420,7 +484,7 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* nazwaPoczatkowa, char*
 		printf("%s", odwrocone[j]);
 	}
 
-	printf("%s\n", nazwaPoczatkowa);
+	printf("%s\n", wierzcholekPoczatkowy);
 	printf("Laczny koszt : %d\n", lacznyKoszt);
 
 	//zapiszDoPliku(wyjscie, odwrocone, i, lacznyKoszt, nazwaDocelowa);

@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 	char* polaczenia = wczytajPolaczenia(wejscie);
 
 	// Inicjalizacja listy
-	inicjalizacja(wejscie);
+	inicjalizacja(wejscie,"A1","D1");
 
 	// Wykonanie algorytmu dla kazdego wierzcholka - poki co tylko dla jednej pary, dla testu
 	// Poki co tez bez zapisu do pliku
