@@ -14,7 +14,7 @@ Projekt PK
 4. wczytajPolaczenia - wczytuje poprawnie, zwraca jeden napis
 
 ## Co nie działa
-1. inicjalizacja - powinno tworzyć początkową listę wierzchołków oraz listy połączeń i zapisywać wskaźnik na pierwszy element do zmiennej Wierzcholek (w deklaracji struktury)
+1. inicjalizacja - tworzy elementy zarówno listy wierzchołków, jak i listy połączeń poprawnie - jednak wraz z przestawianiem wskaźnika odpowiedzialnego za dodawanie kolejnych elementów, wskaźnik wskazujący na pierwszy element również się przestawia (?)
 2. dijkstra - powinno wypisać do konsoli ścieżkę oraz łączny koszt.
 
 ## Co póki co nie jest zaimplementowane
