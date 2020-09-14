@@ -35,9 +35,10 @@ int iloscPolaczen(char* nazwaPliku);
 
 /** Inicjalizuje liste wierzcholkow nazwana Wierzcholek (w definicji struktury)
 * @param nazwaPliku Napis zawierajacy nazwe pliku wejsciowego
+* @return Wskaznik na pierwszy element listy wierzcholkow
 * @note Po wykonaniu tej funkcji, zmienna Wierzcholek (w deklaracji struktury) powinna wskazywac na pierwszy element listy dwukierunkowej wierzcholkow
 */
-void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy);
+struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy);
 
 /** Wykorzustujac algorytm Dijkstry wyznacza najbardziej korzystne drogi z wierzcholka do pozostalych
 * @param ileWierzcholkow Ilosc wierzcholkow, znaleziona za pomoca funkcji iloscWierzcholkow
@@ -46,7 +47,7 @@ void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcho
 * @param nazwaDocelowa Nazwa wierzcholka, do ktorego chcemy sie poruszyc (np. D1)
 * @param wyjscie Napis zawierajacy nazwe pliku wyjsciowego
 */
-void dijkstra(int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie);
+void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie);
 
 /** Wypisuje do pliku wyjsciowego o podanej nazwie sciezke oraz laczny koszt
 * @note TODO
@@ -54,6 +55,7 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy,
 void zapiszDoPliku(char* wyjscie, char* sciezka, int dlugoscSciezki, int lacznyKoszt, char* nazwaDocelowa);
 
 /** Zwalnia pamiec uzyta na liste wierzcholkow nazwana Wierzcholek (w definicji struktury)
-* @note TODO
+* @param head Wskaznik na pierwszy element listy, ktorej pamiec zwalniamy
+* @note Funkcja zwolni rowniez pamiec zaalokowana na listy polaczen oraz napisy
 */
-void zwolnijPamiecListy();
+void zwolnijPamiecListy(struct wierzcholek* head);

@@ -205,7 +205,7 @@ char* wczytajPolaczenia(char* nazwaPliku)
 	return polaczenia;
 }
 
-void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy)
+struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy)
 {
 	int n = iloscWierzcholkow(nazwaPliku);
 	int k = iloscPolaczen(nazwaPliku);
@@ -216,15 +216,13 @@ void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcho
 
 	struct wierzcholek *p, *head;
 	
-	p = malloc(sizeof(struct wierzcholek));
+	p = (struct wierzcholek*)malloc(sizeof(struct wierzcholek));
 	head = NULL;
 
 	// Odpowiedzialny za wyciaganie odpowiednich nazw z napisu wierzcholki
 	int indeksNazwy = 0;
 
 	// Inicjalizacja listy wierzcholkow
-
-	//! Blad: head wskazuje na to samo co p (ostatni element), zamiast na pierwszy
 
 	for (int i = 0; i < n; i++)
 	{
@@ -234,7 +232,7 @@ void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcho
 		}
 		else
 		{
-			p->nastepny = malloc(sizeof(struct wierzcholek));
+			p->nastepny = (struct wierzcholek*)malloc(sizeof(struct wierzcholek));
 			p = p->nastepny;
 		}
 
@@ -251,7 +249,8 @@ void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcho
 
 		indeksNazwy++;
 
-		p->nazwa = nazwaW;
+		p->nazwa = (char*)malloc(3 * sizeof(char));
+		p->nazwa = strcpy(p->nazwa,&nazwaW);
 		p->odwiedzony = false;
 		p->poprzedni = NULL;
 		p->polaczenie = NULL;
@@ -326,7 +325,7 @@ void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcho
 			{
 				if (p->polaczenie == NULL)
 				{
-					p->polaczenie = malloc(sizeof(struct polaczenie));
+					p->polaczenie = (struct polaczenie*)malloc(sizeof(struct polaczenie));
 
 					struct wierzcholek *p2 = head;
 
@@ -338,6 +337,7 @@ void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcho
 					p->polaczenie->wierzcholekPolaczony = p2;
 					p->polaczenie->odleglosc = value;
 					p->polaczenie->nastepnePolaczenie = NULL;
+					break;
 				}
 				else
 				{
@@ -353,9 +353,9 @@ void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcho
 						p2 = p2->nastepny;
 					}
 
-					p->polaczenie->nastepnePolaczenie = malloc(sizeof(struct polaczenie));
+					p->polaczenie->nastepnePolaczenie = (struct polaczenie*)malloc(sizeof(struct polaczenie));
 					p->polaczenie->nastepnePolaczenie->wierzcholekPolaczony = p2;
-					p2->polaczenie->nastepnePolaczenie->odleglosc = value;
+					p->polaczenie->nastepnePolaczenie->odleglosc = value;
 					p->polaczenie->nastepnePolaczenie->nastepnePolaczenie = NULL;
 
 					break;
@@ -367,21 +367,25 @@ void inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcho
 	}
 
 	// Przypisanie wartosci head to instancji Wierzcholek stworzonej w deklaracji struktury?
+	// chyba tak nie mozna? XD
 	Wierzcholek = head;
+
+	return head;
 }
 
-void dijkstra(int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie)
+void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie)
 {
-	struct wierzcholek* pp = Wierzcholek;
+	struct wierzcholek* pp = head;
+
+	int iloscOdwiedzonych = 0;	// ilosc wierzcholkow ktore lacznie odwiedzilismy
 
 	while (true)
 	{
 		int min = 9999;	// poczatkowo ustawiamy koszt jako bardzo wysoki
-		int iloscOdwiedzonych = 0;	// ilosc wierzcholkow ktore lacznie odwiedzilismy
 
 		// Wskaznik na wierzcholek ktory ma najnizszy koszt
 		struct wierzcholek* cel = NULL;
-		pp = Wierzcholek;
+		pp = head;
 
 		// Sprawdzamy ktory wierzcholek ma najnizszy koszt
 
@@ -397,7 +401,7 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy,
 
 		if (cel == NULL)
 		{
-			pp = Wierzcholek;
+			pp = head;
 
 			while (true)
 			{
@@ -431,34 +435,33 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy,
 				}
 				ppTemp = ppTemp->nastepnePolaczenie;
 			}
+		}
 
-			// Zmieniamy wartosc "odwiedzony" celu
-			cel->odwiedzony = true;
+		// Zmieniamy wartosc "odwiedzony" celu
+		cel->odwiedzony = true;
 
-			iloscOdwiedzonych++;
+		iloscOdwiedzonych++;
 
-			if (iloscOdwiedzonych == ileWierzcholkow)
-			{
-				// Odwiedzilismy wszystkie wierzcholki
-				break;
-			}
+		if (iloscOdwiedzonych == ileWierzcholkow)
+		{
+			// Odwiedzilismy wszystkie wierzcholki
+			break;
 		}
 	}
 
 	// Odnajdujemy wierzcholek docelowy
-	struct wierzcholek* wPoczatkowy;
+	struct wierzcholek* wPoczatkowy = head;
 	struct wierzcholek* temp = NULL;
 
 	// Laczny koszt aby poruszyc sie do wierzcholka docelowego
 	int lacznyKoszt = 0;
-	int i = 0;
 
-	char** odwrocone = (char**)malloc((ilePolaczen+1) * sizeof(char*));
-	wPoczatkowy = Wierzcholek;
+	// Sciezka do wierzcholka docelowego - poczatkowo pusta (zakladamy maksymalny rozmiar 60)
+	char* sciezka = (char*)calloc(60, sizeof(char));
 
 	while (wPoczatkowy != NULL)
 	{
-		if (strcmp(wPoczatkowy->nazwa,wierzcholekDocelowy) == 0)
+		if (strcmp(wPoczatkowy->nazwa, wierzcholekDocelowy) == 0)
 		{
 			temp = wPoczatkowy;
 			lacznyKoszt = wPoczatkowy->koszt;
@@ -468,22 +471,21 @@ void dijkstra(int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy,
 		wPoczatkowy = wPoczatkowy->nastepny;
 	}
 
-	while (temp->poprzedni != NULL)
+	while (temp != NULL)
 	{
-		if (strcmp(temp->poprzedni->nazwa,wierzcholekPoczatkowy) == 0)
+		if (strcmp(temp->nazwa, wierzcholekPoczatkowy) == 0)
 		{
 			break;
 		}
-		odwrocone[i] = temp->poprzedni->nazwa;
+
+		strcat(sciezka, temp->nazwa);
+		strcat(sciezka, "<-");
+
 		temp = temp->poprzedni;
-		i++;
 	}
 
-	for (int j = i - 1; j >= 0; j--)
-	{
-		printf("%s", odwrocone[j]);
-	}
-
+	// Poprawny koszt, niepoprawna sciezka, i w odwrotnej kolejnosci
+	printf("Sciezka: %s", sciezka);
 	printf("%s\n", wierzcholekPoczatkowy);
 	printf("Laczny koszt : %d\n", lacznyKoszt);
 
@@ -495,7 +497,24 @@ void zapiszDoPliku(char* wyjscie, char* sciezka, int dlugoscSciezki, int lacznyK
 	//
 }
 
-void zwolnijPamiecListy()
+void zwolnijPamiecListy(struct wierzcholek* head)
 {
-	//
+	while (head != NULL)
+	{
+		struct wierzcholek* nextW = head->nastepny;
+
+		while (head->polaczenie != NULL)
+		{
+			struct polaczenie* nextP = head->polaczenie->nastepnePolaczenie;
+			free(head->polaczenie);
+			head->polaczenie = nextP;
+		}
+
+		free(head->nazwa);
+		free(head);
+
+		head = nextW;
+	}
+
+	printf("Zwolniono pamiec!");
 }

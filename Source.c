@@ -38,9 +38,11 @@ int main(int argc, char* argv[])
 	char* polaczenia = wczytajPolaczenia(wejscie);
 
 	// Inicjalizacja listy
-	inicjalizacja(wejscie,"A1","D1");
+	struct wierzcholek* pHead = inicjalizacja(wejscie,"A1","D1");
 
 	// Wykonanie algorytmu dla kazdego wierzcholka - poki co tylko dla jednej pary, dla testu
 	// Poki co tez bez zapisu do pliku
-	dijkstra(ileWierzcholkow, ilePolaczen, "A1", "D1", wyjscie);
+	dijkstra(pHead, ileWierzcholkow, ilePolaczen, "A1", "D1", wyjscie);
+
+	zwolnijPamiecListy(pHead);
 }
