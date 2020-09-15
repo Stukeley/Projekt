@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 	char* wejscie = NULL;
 	char* wyjscie = NULL;
 
-	//int* wierzcholki;	//?
+	char* listaWierzcholkow = (char*)calloc(60, sizeof(char));
 
 	for (int i = 0; i < argc; i++)
 	{
@@ -23,6 +23,23 @@ int main(int argc, char* argv[])
 			// Plik wyjsciowy
 			wyjscie = argv[++i];
 		}
+		else if (strcmp(temp, "-n") == 0)
+		{
+			// Napis zawierajacy wszystkie wierzcholki, dla ktorych wyznaczymy sciezki
+			for (int j = i+1; j < argc; j++)
+			{
+				char* temp2 = argv[j];
+
+				if (strncmp(temp2, "-", 1) == 0)
+				{
+					i = j - i;
+					break;
+				}
+
+				listaWierzcholkow = strcat(listaWierzcholkow, temp2);
+				listaWierzcholkow = strcat(listaWierzcholkow, ",");
+			}
+		}
 	}
 
 	if (wejscie == NULL || wyjscie == NULL)
@@ -34,15 +51,38 @@ int main(int argc, char* argv[])
 	int ilePolaczen = iloscPolaczen(wejscie);
 
 	char* wierzcholki = wczytajWierzcholki(wejscie);
-
 	char* polaczenia = wczytajPolaczenia(wejscie);
 
-	// Inicjalizacja listy
-	struct wierzcholek* pHead = inicjalizacja(wejscie,"A1","D1");
+	// Odpowiedzialny za wyciaganie odpowiednich wierzcholkow wejsciowych z napisu listaWierzcholkow
+	int indeksListy = 0;
+	int i = 0;
 
-	// Wykonanie algorytmu dla kazdego wierzcholka - poki co tylko dla jednej pary, dla testu
-	// Poki co tez bez zapisu do pliku
-	dijkstra(pHead, ileWierzcholkow, ilePolaczen, "A1", "D1", wyjscie);
+	char obecnyWierzcholek[3];
 
-	zwolnijPamiecListy(pHead);
+	while (true)
+	{
+		if (listaWierzcholkow[indeksListy] == ',')
+		{
+			indeksListy++;
+			obecnyWierzcholek[i] = '\0';
+			i = 0;
+
+			char* nieSasiaduja = wierzcholkiNieSasiadujace(wierzcholki, polaczenia, obecnyWierzcholek);
+
+			// Wywolanie algorytmu Dijkstry
+			wywolajDlaWszystkich(obecnyWierzcholek, nieSasiaduja, wejscie, wyjscie);
+		}
+		else if (listaWierzcholkow[indeksListy] == '\0')
+		{
+			break;
+		}
+		else
+		{
+			obecnyWierzcholek[i++] = listaWierzcholkow[indeksListy++];
+		}
+	}
+
+	// Zwalnianie pamieci potrzebnej na napisy
+	free(wierzcholki);
+	free(polaczenia);
 }

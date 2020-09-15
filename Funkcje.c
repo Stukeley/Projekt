@@ -74,6 +74,127 @@ int iloscPolaczen(char* nazwaPliku)
 	return iloscPol;
 }
 
+char* wierzcholkiNieSasiadujace(char* wierzcholki, char* polaczenia, char* wierzcholekPoczatkowy)
+{
+	char* sasiaduja = (char*)calloc(60, sizeof(char));
+
+	// Sprawdzamy kazde polaczenie, czy jeden z polaczonych wierzcholkow to wierzcholekPoczatkowy - jesli tak, dodajemy je do "sasiaduja". Pozostale dodajemy do "nieSasiaduja"
+	// Uznajemy, ze wierzcholek poczatkowy sasiaduje sam ze soba (nie ma to wplywu na algorytm, a tylko ulatwi zwracanie poprawnej wartosci)
+
+	sasiaduja = strcat(sasiaduja, wierzcholekPoczatkowy);
+	sasiaduja = strcat(sasiaduja, ",");
+
+	int indeksPolaczen = 0;
+	int i = 0;
+	int j = 0;
+	char W1[3];
+	char W2[3];
+
+	while (true)
+	{
+		// A1_B1_1,A1_C1_4,B1_C1_...,
+
+		if (polaczenia[indeksPolaczen] == '\0')
+		{
+			// Koniec napisu
+
+			break;
+		}
+		else if (polaczenia[indeksPolaczen] == ',')
+		{
+			indeksPolaczen++;
+			// Nastepne polaczenie
+
+			i = 0;
+			j = 0;
+
+			W1[0] = ' ';
+			W1[1] = ' ';
+			W1[2] = ' ';
+
+			W2[0] = ' ';
+			W2[1] = ' ';
+			W2[2] = ' ';
+		}
+		else if (polaczenia[indeksPolaczen] == '_')
+		{
+			//! co dla kosztu?
+
+			if (polaczenia[++indeksPolaczen] >= 48 && polaczenia[indeksPolaczen] <= 57)
+			{
+				// Liczba(koszt) - pomijamy i idziemy dalej
+				continue;
+			}
+
+			W1[i] = '\0';
+
+			while (polaczenia[indeksPolaczen] != '_')
+			{
+				W2[j++] = polaczenia[indeksPolaczen++];
+			}
+
+			W2[j] = '\0';
+
+			if (strcmp(wierzcholekPoczatkowy, W1) == 0)
+			{
+				// W2 jest sasiadem
+				sasiaduja = strcat(sasiaduja, W2);
+				sasiaduja = strcat(sasiaduja, ",");
+			}
+			else if (strcmp(wierzcholekPoczatkowy, W2) == 0)
+			{
+				// W1 jest sasiadem
+				sasiaduja = strcat(sasiaduja, W1);
+				sasiaduja = strcat(sasiaduja, ",");
+			}
+
+			i = 0;
+			j = 0;
+		}
+		else
+		{
+			W1[i++] = polaczenia[indeksPolaczen++];
+		}
+	}
+
+	// Dla kazdego wierzcholka sprawdzamy, czy napis "sasiaduja" zawiera ten wierzcholek; jesli nie, dodajemy go do napisu "nieSasiaduja"
+
+	// Wartosc zwracana
+	char* nieSasiaduja = (char*)calloc(60, sizeof(char));
+
+	int indeksWierzcholkow = 0;
+	i = 0;
+
+	while (true)
+	{
+		if (wierzcholki[indeksWierzcholkow] == '\0')
+		{
+			break;
+		}
+		else if (wierzcholki[indeksWierzcholkow] == ',')
+		{
+			indeksWierzcholkow++;
+
+			W1[i] = '\0';
+			i = 0;
+
+			if (strstr(sasiaduja, W1) == NULL)
+			{
+				// "sasiaduja" nie zawiera W1 - czyli nie jest on sasiadem wierzcholka poczatkowego
+				nieSasiaduja = strcat(nieSasiaduja, W1);
+				nieSasiaduja = strcat(nieSasiaduja, ",");
+			}
+		}
+		else
+		{
+			W1[i++] = wierzcholki[indeksWierzcholkow++];
+		}
+	}
+
+	// Powinno zwrocic np. D1,E1,F1,
+	return nieSasiaduja;
+}
+
 char* wczytajWierzcholki(char* nazwaPliku)
 {
 	int ilosc = iloscWierzcholkow(nazwaPliku);
@@ -199,13 +320,45 @@ char* wczytajPolaczenia(char* nazwaPliku)
 		}
 	}
 
+	polaczenia[indeks] = '\0';
+
 	fclose(plik);
 
 	// Powinno zwrocic np. "A1_B1_1,A1_C1_2,..."
 	return polaczenia;
 }
 
-struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy)
+void zapiszNaglowekDoPliku(char* wyjscie, char* wierzcholekPoczatkowy)
+{
+	FILE* plik = fopen(wyjscie, "a");
+
+	if (plik == NULL)
+	{
+		printf("Blad przy tworzeniu pliku wyjsciowego!");
+		return;
+	}
+
+	fprintf(plik, "dla wierzcholka %s:\n", wierzcholekPoczatkowy);
+
+	fclose(plik);
+}
+
+void zapiszSciezkeDoPliku(char* wyjscie, char* sciezka, int lacznyKoszt)
+{
+	FILE* plik = fopen(wyjscie, "a");
+
+	if (plik == NULL)
+	{
+		printf("Blad przy tworzeniu pliku wyjsciowego!");
+		return;
+	}
+
+	fprintf(plik, "%s : %d\n", sciezka, lacznyKoszt);
+
+	fclose(plik);
+}
+
+struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy)
 {
 	int n = iloscWierzcholkow(nazwaPliku);
 	int k = iloscPolaczen(nazwaPliku);
@@ -373,15 +526,62 @@ struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy,
 	return head;
 }
 
-void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie)
+void wywolajDlaWszystkich(char* wierzcholekPoczatkowy, char* nieSasiaduja, char* wejscie, char* wyjscie)
 {
-	struct wierzcholek* pp = head;
+	// Zmienne potrzebne do wywolania funkcji "dijkstra" - takie same dla kazdego wierzcholka
+	int iloscW = iloscWierzcholkow(wejscie);
+	int iloscP = iloscPolaczen(wejscie);
 
-	int iloscOdwiedzonych = 0;	// ilosc wierzcholkow ktore lacznie odwiedzilismy
+	// Indeks odpowiedzialny za poprawne wyciaganie wierzcholkow z napisu "nieSasiaduja"
+	int indeksSasiadow = 0;
+	int i = 0;
+
+	char drugiWierzcholek[3];
+
+	// Zapisujemy naglowek do pliku (poprawny format pliku wyjsciowego)
+	zapiszNaglowekDoPliku(wyjscie, wierzcholekPoczatkowy);
 
 	while (true)
 	{
-		int min = 9999;	// poczatkowo ustawiamy koszt jako bardzo wysoki
+		if (nieSasiaduja[indeksSasiadow] == ',')
+		{
+			indeksSasiadow++;
+			drugiWierzcholek[i] = '\0';
+			i = 0;
+
+			// Inicjalizujemy liste za kazdym razem, poniewaz algorytm nie zadziala poprawnie dla listy ktora juz zostala zmieniona (a przekazujac wskaznik do funkcji nie tworzymy jego kopii)
+			struct wierzcholek* temp = inicjalizacja(wejscie, wierzcholekPoczatkowy);
+
+			// Wywolanie algorytmu
+			dijkstra(temp, iloscW, iloscP, wierzcholekPoczatkowy, drugiWierzcholek, wyjscie);
+
+			// Zwalniamy pamiec potrzebna na liste
+			zwolnijPamiecListy(temp);
+		}
+		else if (nieSasiaduja[indeksSasiadow] == '\0')
+		{
+			// Wywolalismy dla wszystkich wierzcholkow
+			break;
+		}
+		else
+		{
+			drugiWierzcholek[i++] = nieSasiaduja[indeksSasiadow++];
+		}
+	}
+}
+
+void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie)
+{
+	// Zmienna tymczasowa, ktora bedziemy poruszac sie po liscie
+	struct wierzcholek* pp = head;
+
+	// Ilosc wierzcholkow ktore lacznie odwiedzilismy
+	int iloscOdwiedzonych = 0;
+
+	while (true)
+	{
+		// Poczatkowo ustawiamy koszt jako bardzo wysoki (bedzie pozniej modyfikowany)
+		int min = 9999;
 
 		// Wskaznik na wierzcholek ktory ma najnizszy koszt
 		struct wierzcholek* cel = NULL;
@@ -399,6 +599,7 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 			pp = pp->nastepny;
 		}
 
+		// Jezeli nie znalezlismy korzystniejszego wierzcholka, wracamy na poczatek listy i ustawiamy cel na pierwszy nieodwiedzony wierzcholek
 		if (cel == NULL)
 		{
 			pp = head;
@@ -414,7 +615,7 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 			}
 		}
 
-		// Obliczamy koszt kazdego wierzcholka ktory ma jakiekolwiek polaczenia
+		// Obliczamy koszt kazdego wierzcholka ktory ma jakiekolwiek polaczenia (koszt wierzcholka + odleglosc, czyli koszt przemieszczenia sie)
 		if (cel->polaczenie != NULL)
 		{
 			if (cel->polaczenie->wierzcholekPolaczony->koszt > cel->koszt + cel->polaczenie->odleglosc)
@@ -444,7 +645,7 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 
 		if (iloscOdwiedzonych == ileWierzcholkow)
 		{
-			// Odwiedzilismy wszystkie wierzcholki
+			// Odwiedzilismy wszystkie wierzcholki - koniec algorytmu
 			break;
 		}
 	}
@@ -457,12 +658,14 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 	int lacznyKoszt = 0;
 
 	// Sciezka do wierzcholka docelowego - poczatkowo pusta (zakladamy maksymalny rozmiar 60)
+	// Format: D<-W1<-W2<-...<-P
 	char* sciezka = (char*)calloc(60, sizeof(char));
 
 	while (wPoczatkowy != NULL)
 	{
 		if (strcmp(wPoczatkowy->nazwa, wierzcholekDocelowy) == 0)
 		{
+			// Znalezlismy wierzcholek docelowy, jego koszt jest lacznym kosztem
 			temp = wPoczatkowy;
 			lacznyKoszt = wPoczatkowy->koszt;
 			break;
@@ -471,6 +674,7 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 		wPoczatkowy = wPoczatkowy->nastepny;
 	}
 
+	// Zapisujemy sciezke korzystajac z poprzednich wierzcholkow, w stosunku do znalezionego wyzej wierzcholka docelowego
 	while (temp != NULL)
 	{
 		if (strcmp(temp->nazwa, wierzcholekPoczatkowy) == 0)
@@ -484,17 +688,13 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 		temp = temp->poprzedni;
 	}
 
-	// Poprawny koszt, niepoprawna sciezka, i w odwrotnej kolejnosci
-	printf("Sciezka: %s", sciezka);
-	printf("%s\n", wierzcholekPoczatkowy);
+	strcat(sciezka, wierzcholekPoczatkowy);
+
+	printf("Sciezka: %s\n", sciezka);
 	printf("Laczny koszt : %d\n", lacznyKoszt);
 
-	//zapiszDoPliku(wyjscie, odwrocone, i, lacznyKoszt, nazwaDocelowa);
-}
-
-void zapiszDoPliku(char* wyjscie, char* sciezka, int dlugoscSciezki, int lacznyKoszt, char* nazwaDocelowa)
-{
-	//
+	// Zapisujemy sciezke i koszt do pliku (naglowek zostal zapisany wyzej)
+	zapiszSciezkeDoPliku(wyjscie, sciezka, lacznyKoszt);
 }
 
 void zwolnijPamiecListy(struct wierzcholek* head)
@@ -516,5 +716,5 @@ void zwolnijPamiecListy(struct wierzcholek* head)
 		head = nextW;
 	}
 
-	printf("Zwolniono pamiec!");
+	printf("Zwolniono pamiec!\n");
 }

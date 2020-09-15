@@ -30,6 +30,7 @@
     <Text Include="Sample.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Dokumentacja\Doxyfile" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
