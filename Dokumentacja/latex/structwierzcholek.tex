@@ -1,0 +1,35 @@
+\doxysection{Dokumentacja struktury wierzcholek}
+\label{structwierzcholek}\index{wierzcholek@{wierzcholek}}
+
+
+{\ttfamily \#include $<$Struktury.\+h$>$}
+
+\doxysubsection*{Pola danych}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\label{structwierzcholek_ad7ee7579fcfe12b8265bd34634d80c12}} 
+char $\ast$ \textbf{ nazwa}
+\begin{DoxyCompactList}\small\item\em Nazwa wierzcholka, np. A1. \end{DoxyCompactList}\item 
+\mbox{\label{structwierzcholek_a636f294b3ecdd36944a87e1d300d2410}} 
+bool \textbf{ odwiedzony}
+\begin{DoxyCompactList}\small\item\em Czy wierzcholek byl juz odwiedzony -\/ ta zmienna potrzebna nam jest do algorytmu Dijkstry. \end{DoxyCompactList}\item 
+\mbox{\label{structwierzcholek_a28df3ceba73b6288f21d22c225073e08}} 
+int \textbf{ koszt}
+\begin{DoxyCompactList}\small\item\em Koszt poruszenia sie do wierzcholka -\/ ta zmienna potrzebna nam jest do algorytmu Dijkstry. \end{DoxyCompactList}\item 
+\mbox{\label{structwierzcholek_a86716417602b466caa6f36cb70da9a72}} 
+struct \textbf{ wierzcholek} $\ast$ \textbf{ poprzedni}
+\begin{DoxyCompactList}\small\item\em Poprzedni wierzcholek. \end{DoxyCompactList}\item 
+\mbox{\label{structwierzcholek_aa62f105efa2e343b5a68ff17c6abc441}} 
+struct \textbf{ wierzcholek} $\ast$ \textbf{ nastepny}
+\begin{DoxyCompactList}\small\item\em Nastepny wierzcholek. \end{DoxyCompactList}\item 
+\mbox{\label{structwierzcholek_a110fbb914fa18903a88f06bec3a111ae}} 
+struct \textbf{ polaczenie} $\ast$ \textbf{ polaczenie}
+\begin{DoxyCompactList}\small\item\em Lista jednokierunkowa polaczen z danego wierzcholka. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Opis szczegółowy}
+Struktura odpowiedzialna za wierzcholek grafu -\/ zawiera jego nazwe, liste jednokierunkowa polaczen wychodzacych z niego oraz zmienne potrzebne przy implementacji algorytmu Dijkstry. 
+
+Dokumentacja dla tej struktury została wygenerowana z pliku\+:\begin{DoxyCompactItemize}
+\item 
+\textbf{ Struktury.\+h}\end{DoxyCompactItemize}

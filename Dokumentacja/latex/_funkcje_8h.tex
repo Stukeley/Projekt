@@ -1,0 +1,219 @@
+\doxysection{Dokumentacja pliku Funkcje.\+h}
+\label{_funkcje_8h}\index{Funkcje.h@{Funkcje.h}}
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}Struktury.\+h\char`\"{}}\newline
+\doxysubsection*{Funkcje}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \textbf{ wczytaj\+Wierzcholki} (char $\ast$nazwa\+Pliku)
+\item 
+char $\ast$ \textbf{ wczytaj\+Polaczenia} (char $\ast$nazwa\+Pliku)
+\item 
+int \textbf{ ilosc\+Wierzcholkow} (char $\ast$nazwa\+Pliku)
+\item 
+int \textbf{ ilosc\+Polaczen} (char $\ast$nazwa\+Pliku)
+\item 
+char $\ast$ \textbf{ wierzcholki\+Nie\+Sasiadujace} (char $\ast$wierzcholki, char $\ast$polaczenia, char $\ast$wierzcholek\+Poczatkowy)
+\item 
+void \textbf{ zapisz\+Naglowek\+Do\+Pliku} (char $\ast$wyjscie, char $\ast$wierzcholek\+Poczatkowy)
+\item 
+void \textbf{ zapisz\+Sciezke\+Do\+Pliku} (char $\ast$wyjscie, char $\ast$sciezka, int laczny\+Koszt)
+\item 
+struct \textbf{ wierzcholek} $\ast$ \textbf{ inicjalizacja} (char $\ast$nazwa\+Pliku, char $\ast$wierzcholek\+Poczatkowy)
+\item 
+void \textbf{ wywolaj\+Dla\+Wszystkich} (char $\ast$wierzcholek\+Poczatkowy, char $\ast$nie\+Sasiaduja, char $\ast$wejscie, char $\ast$wyjscie)
+\item 
+void \textbf{ dijkstra} (struct \textbf{ wierzcholek} $\ast$head, int ile\+Wierzcholkow, int ile\+Polaczen, char $\ast$wierzcholek\+Poczatkowy, char $\ast$wierzcholek\+Docelowy, char $\ast$wyjscie)
+\item 
+void \textbf{ zwolnij\+Pamiec\+Listy} (struct \textbf{ wierzcholek} $\ast$head)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Dokumentacja funkcji}
+\mbox{\label{_funkcje_8h_a0a3505842fbfaf9c62cab6d06a0c11e9}} 
+\index{Funkcje.h@{Funkcje.h}!dijkstra@{dijkstra}}
+\index{dijkstra@{dijkstra}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{dijkstra()}
+{\footnotesize\ttfamily void dijkstra (\begin{DoxyParamCaption}\item[{struct \textbf{ wierzcholek} $\ast$}]{head,  }\item[{int}]{ile\+Wierzcholkow,  }\item[{int}]{ile\+Polaczen,  }\item[{char $\ast$}]{wierzcholek\+Poczatkowy,  }\item[{char $\ast$}]{wierzcholek\+Docelowy,  }\item[{char $\ast$}]{wyjscie }\end{DoxyParamCaption})}
+
+Wykorzystujac algorytm Dijkstry wyznacza najbardziej korzystne drogi z jednego wierzcholka do drugiego 
+\begin{DoxyParams}{Parametry}
+{\em head} & Wskaznik na pierwszy element listy wierzcholkow \\
+\hline
+{\em ile\+Wierzcholkow} & Ilosc wierzcholkow, znaleziona za pomoca funkcji ilosc\+Wierzcholkow \\
+\hline
+{\em ile\+Polaczen} & Ilosc polaczen, znaleziona za pomoca funkcji ilosc\+Polaczen \\
+\hline
+{\em wierzcholek\+Poczatkowy} & Nazwa wierzcholka, od ktorego zaczynamy sie poruszac (np. A1) \\
+\hline
+{\em wierzcholek\+Docelowy} & Nazwa wierzcholka, do ktorego chcemy sie poruszyc (np. D1) \\
+\hline
+{\em wyjscie} & Napis zawierajacy nazwe pliku wyjsciowego \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Nota}
+Funkcja jest wywolywana dla par wierzcholkow przez funkcje \char`\"{}wywolaj\+Dla\+Wszystkich\char`\"{} 
+
+Funkcja zapisuje sciezke wraz z kosztem do pliku wyjsciowego 
+\end{DoxyNote}
+\mbox{\label{_funkcje_8h_a9bc29a30544c1f6933313f18ea77da23}} 
+\index{Funkcje.h@{Funkcje.h}!iloscPolaczen@{iloscPolaczen}}
+\index{iloscPolaczen@{iloscPolaczen}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{iloscPolaczen()}
+{\footnotesize\ttfamily int ilosc\+Polaczen (\begin{DoxyParamCaption}\item[{char $\ast$}]{nazwa\+Pliku }\end{DoxyParamCaption})}
+
+Zlicza ilosc polaczen w pliku (ilosc elementow poza pierwszym w kazdym wierszu) 
+\begin{DoxyParams}{Parametry}
+{\em nazwa\+Pliku} & Napis zawierajacy nazwe pliku wejsciowego \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Zwraca}
+Ilosc polaczen w pliku wejsciowym 
+\end{DoxyReturn}
+\begin{DoxyNote}{Nota}
+Uznajemy, ze kazde polaczenie zakonczone jest srednikiem 
+\end{DoxyNote}
+\mbox{\label{_funkcje_8h_ac2290249cb1031c28735f564cf245b69}} 
+\index{Funkcje.h@{Funkcje.h}!iloscWierzcholkow@{iloscWierzcholkow}}
+\index{iloscWierzcholkow@{iloscWierzcholkow}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{iloscWierzcholkow()}
+{\footnotesize\ttfamily int ilosc\+Wierzcholkow (\begin{DoxyParamCaption}\item[{char $\ast$}]{nazwa\+Pliku }\end{DoxyParamCaption})}
+
+Zlicza ilosc wierzcholkow w pliku (tylko pierwszy element w kazdym wierszu) 
+\begin{DoxyParams}{Parametry}
+{\em nazwa\+Pliku} & Napis zawierajacy nazwe pliku wejsciowego \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Zwraca}
+Ilosc wierzcholkow w pliku wejsciowym 
+\end{DoxyReturn}
+\begin{DoxyNote}{Nota}
+Uznajemy, ze kazda linia zawiera opis jednego wierzcholka 
+\end{DoxyNote}
+\mbox{\label{_funkcje_8h_afef9543472de0443e2d850f640a49d98}} 
+\index{Funkcje.h@{Funkcje.h}!inicjalizacja@{inicjalizacja}}
+\index{inicjalizacja@{inicjalizacja}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{inicjalizacja()}
+{\footnotesize\ttfamily struct \textbf{ wierzcholek}$\ast$ inicjalizacja (\begin{DoxyParamCaption}\item[{char $\ast$}]{nazwa\+Pliku,  }\item[{char $\ast$}]{wierzcholek\+Poczatkowy }\end{DoxyParamCaption})}
+
+Inicjalizuje liste wierzcholkow nazwana i zwraca wskaznik na pierwszy jej element 
+\begin{DoxyParams}{Parametry}
+{\em nazwa\+Pliku} & Napis zawierajacy nazwe pliku wejsciowego \\
+\hline
+{\em wierzcholek\+Poczatkowy} & Napis zawierajacy nazwe wierzcholka poczatkowego (od ktorego zaczynamy szukac sciezki do kolejnych) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Zwraca}
+Wskaznik na pierwszy element listy wierzcholkow 
+\end{DoxyReturn}
+\mbox{\label{_funkcje_8h_a0dd5580dc38c1544021daef33d18d29f}} 
+\index{Funkcje.h@{Funkcje.h}!wczytajPolaczenia@{wczytajPolaczenia}}
+\index{wczytajPolaczenia@{wczytajPolaczenia}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{wczytajPolaczenia()}
+{\footnotesize\ttfamily char$\ast$ wczytaj\+Polaczenia (\begin{DoxyParamCaption}\item[{char $\ast$}]{nazwa\+Pliku }\end{DoxyParamCaption})}
+
+Wczytuje polaczenia z pliku wejsciowego o podanej nazwie jako jeden napis 
+\begin{DoxyParams}{Parametry}
+{\em nazwa\+Pliku} & Napis zawierajacy nazwe pliku wejsciowego \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Zwraca}
+Napis zawierajacy wszystkie polaczenia oddzielone przecinkami, np. A1\+\_\+\+B1\+\_\+1,A1\+\_\+\+C1\+\_\+2 
+\end{DoxyReturn}
+\mbox{\label{_funkcje_8h_a8df20bfe338b45f90661dea022a6df34}} 
+\index{Funkcje.h@{Funkcje.h}!wczytajWierzcholki@{wczytajWierzcholki}}
+\index{wczytajWierzcholki@{wczytajWierzcholki}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{wczytajWierzcholki()}
+{\footnotesize\ttfamily char$\ast$ wczytaj\+Wierzcholki (\begin{DoxyParamCaption}\item[{char $\ast$}]{nazwa\+Pliku }\end{DoxyParamCaption})}
+
+Wczytuje wierzcholki z pliku wejsciowego o podanej nazwie jako jeden napis 
+\begin{DoxyParams}{Parametry}
+{\em nazwa\+Pliku} & Napis zawierajacy nazwe pliku wejsciowego \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Zwraca}
+Napis zawierajacy wszystkie wierzcholki oddzielone przecinkami, np. A1,B1,C1,D1 
+\end{DoxyReturn}
+\mbox{\label{_funkcje_8h_ae25742d6e39b5531f3e30b8289ad5032}} 
+\index{Funkcje.h@{Funkcje.h}!wierzcholkiNieSasiadujace@{wierzcholkiNieSasiadujace}}
+\index{wierzcholkiNieSasiadujace@{wierzcholkiNieSasiadujace}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{wierzcholkiNieSasiadujace()}
+{\footnotesize\ttfamily char$\ast$ wierzcholki\+Nie\+Sasiadujace (\begin{DoxyParamCaption}\item[{char $\ast$}]{wierzcholki,  }\item[{char $\ast$}]{polaczenia,  }\item[{char $\ast$}]{wierzcholek\+Poczatkowy }\end{DoxyParamCaption})}
+
+Zwraca napis zawierajacy wszystkie nazwy wierzcholkow, ktore nie sasiaduja z danym wierzcholkiem poczatkowym 
+\begin{DoxyParams}{Parametry}
+{\em wierzcholki} & Napis zawierajacy wierzcholki wczytane z pliku (zwrocony przez funkcje \char`\"{}wczytaj\+Wierzcholki\char`\"{}) \\
+\hline
+{\em polaczenia} & Napis zawierajacy polaczenia wczytane z pliku (zwrocony przez funkcje \char`\"{}wczytaj\+Polaczenia\char`\"{}) \\
+\hline
+{\em wierzcholek\+Poczatkowy} & Napis zawierajacy nazwe wierzcholka poczatkowego (od ktorego zaczynamy szukac sciezki do kolejnych) @retun Napis zawierajacy wszystkie wierzcholki, ktore nie sasiaduja z podanym wierzcholkiem poczatkowym, oddzielone przecinkami, np. D1,E1,F1 \\
+\hline
+\end{DoxyParams}
+co dla kosztu?\mbox{\label{_funkcje_8h_a11dd340c1d6b2a77beeed9c1e635852d}} 
+\index{Funkcje.h@{Funkcje.h}!wywolajDlaWszystkich@{wywolajDlaWszystkich}}
+\index{wywolajDlaWszystkich@{wywolajDlaWszystkich}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{wywolajDlaWszystkich()}
+{\footnotesize\ttfamily void wywolaj\+Dla\+Wszystkich (\begin{DoxyParamCaption}\item[{char $\ast$}]{wierzcholek\+Poczatkowy,  }\item[{char $\ast$}]{nie\+Sasiaduja,  }\item[{char $\ast$}]{wejscie,  }\item[{char $\ast$}]{wyjscie }\end{DoxyParamCaption})}
+
+Wywoluje algorytm Dijkstry (funkcja \char`\"{}dijkstra\char`\"{}) dla wszystkich wierzcholkow, ktore nie sasiaduja z wierzcholkiem poczatkowym, podanym jako parametr 
+\begin{DoxyParams}{Parametry}
+{\em wierzcholek\+Poczatkowy} & Wierzcholek, dla ktorego bedziemy wywolywac algorytm \\
+\hline
+{\em nie\+Sasiaduja} & Napis zawierajacy wierzcholki, ktore nie sasiaduja z wierzcholkiem poczatkowym (zwrocony przez funkcje \char`\"{}wierzcholki\+Nie\+Sasiadujace\char`\"{}) \\
+\hline
+{\em wyjscie} & Napis zawierajacy nazwe pliku wyjsciowego \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Nota}
+Ta funkcja wykona algorytm Dijkstry dla wierzcholka poczatkowego oraz kazdego wierzcholka zawartego w napisie \char`\"{}nie\+Sasiaduja\char`\"{} 
+\end{DoxyNote}
+\mbox{\label{_funkcje_8h_a6cd6c270646acb6d469970f6ca24f4b3}} 
+\index{Funkcje.h@{Funkcje.h}!zapiszNaglowekDoPliku@{zapiszNaglowekDoPliku}}
+\index{zapiszNaglowekDoPliku@{zapiszNaglowekDoPliku}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{zapiszNaglowekDoPliku()}
+{\footnotesize\ttfamily void zapisz\+Naglowek\+Do\+Pliku (\begin{DoxyParamCaption}\item[{char $\ast$}]{wyjscie,  }\item[{char $\ast$}]{wierzcholek\+Poczatkowy }\end{DoxyParamCaption})}
+
+Zapisuje naglowek do pliku wyjsciowego (aby format byl zgodny z poleceniem) 
+\begin{DoxyParams}{Parametry}
+{\em wyjscie} & Napis zawierajacy nazwe pliku wyjsciowego \\
+\hline
+{\em wierzcholek\+Poczatkowy} & Napis zawierajacy nazwe wierzcholka poczatkowego \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Nota}
+Funkcja zapisze do pliku napis np. \char`\"{}dla wierzcholka A1\char`\"{} 
+
+Funkcja tworzy plik wyjsciowy, jesli nie istnieje 
+\end{DoxyNote}
+\mbox{\label{_funkcje_8h_a3f5290d0c21c063d353323cbe6d6d91a}} 
+\index{Funkcje.h@{Funkcje.h}!zapiszSciezkeDoPliku@{zapiszSciezkeDoPliku}}
+\index{zapiszSciezkeDoPliku@{zapiszSciezkeDoPliku}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{zapiszSciezkeDoPliku()}
+{\footnotesize\ttfamily void zapisz\+Sciezke\+Do\+Pliku (\begin{DoxyParamCaption}\item[{char $\ast$}]{wyjscie,  }\item[{char $\ast$}]{sciezka,  }\item[{int}]{laczny\+Koszt }\end{DoxyParamCaption})}
+
+Wypisuje do pliku wyjsciowego o podanej nazwie sciezke oraz laczny koszt 
+\begin{DoxyParams}{Parametry}
+{\em wyjscie} & Napis zawierajacy nazwe pliku wyjsciowego \\
+\hline
+{\em sciezka} & Napis zawierajacy sciezke do wierzcholka docelowego, w nastepujacym formacie\+: D$<$-\/W1$<$-\/W2$<$-\/...$<$-\/P \\
+\hline
+{\em laczny\+Koszt} & Laczny koszt dla tej sciezki \\
+\hline
+\end{DoxyParams}
+\mbox{\label{_funkcje_8h_a90109a72d09acce046a27bb541927a93}} 
+\index{Funkcje.h@{Funkcje.h}!zwolnijPamiecListy@{zwolnijPamiecListy}}
+\index{zwolnijPamiecListy@{zwolnijPamiecListy}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{zwolnijPamiecListy()}
+{\footnotesize\ttfamily void zwolnij\+Pamiec\+Listy (\begin{DoxyParamCaption}\item[{struct \textbf{ wierzcholek} $\ast$}]{head }\end{DoxyParamCaption})}
+
+Zwalnia pamiec uzyta na liste wierzcholkow, listy polaczen oraz napisy 
+\begin{DoxyParams}{Parametry}
+{\em head} & Wskaznik na pierwszy element listy, ktorej pamiec zwalniamy \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Nota}
+Funkcja zwolni rowniez pamiec zaalokowana na listy polaczen oraz napisy 
+\end{DoxyNote}

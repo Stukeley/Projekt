@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.20"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tablice Routingu: Plik źródłowy Struktury.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Tablice Routingu
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano przez Doxygen 1.8.20 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Szukaj');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Szukaj');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">Struktury.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="_struktury_8h.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="structpolaczenie.html">    8</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structpolaczenie.html">polaczenie</a></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="structpolaczenie.html#a38c454804c136786e91b77de508928df">   10</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structpolaczenie.html#a38c454804c136786e91b77de508928df">odleglosc</a>;  </div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="structpolaczenie.html#a2f203c724e50601342dba15858452930">   11</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwierzcholek.html">wierzcholek</a>* <a class="code" href="structpolaczenie.html#a2f203c724e50601342dba15858452930">wierzcholekPolaczony</a>;   </div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="structpolaczenie.html#a1b15001b84f5a5f0b59d104a6a89ff02">   12</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpolaczenie.html">polaczenie</a>* <a class="code" href="structpolaczenie.html#a1b15001b84f5a5f0b59d104a6a89ff02">nastepnePolaczenie</a>;  </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;} *Polaczenie;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="structwierzcholek.html">   17</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structwierzcholek.html">wierzcholek</a></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="structwierzcholek.html#ad7ee7579fcfe12b8265bd34634d80c12">   19</a></span>&#160;    <span class="keywordtype">char</span>* <a class="code" href="structwierzcholek.html#ad7ee7579fcfe12b8265bd34634d80c12">nazwa</a>;    </div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="structwierzcholek.html#a636f294b3ecdd36944a87e1d300d2410">   20</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="structwierzcholek.html#a636f294b3ecdd36944a87e1d300d2410">odwiedzony</a>; </div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="structwierzcholek.html#a28df3ceba73b6288f21d22c225073e08">   21</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structwierzcholek.html#a28df3ceba73b6288f21d22c225073e08">koszt</a>;  </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="structwierzcholek.html#a86716417602b466caa6f36cb70da9a72">   22</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwierzcholek.html">wierzcholek</a>* <a class="code" href="structwierzcholek.html#a86716417602b466caa6f36cb70da9a72">poprzedni</a>;  </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="structwierzcholek.html#aa62f105efa2e343b5a68ff17c6abc441">   23</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwierzcholek.html">wierzcholek</a>* <a class="code" href="structwierzcholek.html#aa62f105efa2e343b5a68ff17c6abc441">nastepny</a>;   </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="structwierzcholek.html#a110fbb914fa18903a88f06bec3a111ae">   24</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpolaczenie.html">polaczenie</a>* <a class="code" href="structwierzcholek.html#a110fbb914fa18903a88f06bec3a111ae">polaczenie</a>;  </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;} *Wierzcholek;</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="astructpolaczenie_html"><div class="ttname"><a href="structpolaczenie.html">polaczenie</a></div><div class="ttdef"><b>Definition:</b> Struktury.h:9</div></div>
+<div class="ttc" id="astructwierzcholek_html_a86716417602b466caa6f36cb70da9a72"><div class="ttname"><a href="structwierzcholek.html#a86716417602b466caa6f36cb70da9a72">wierzcholek::poprzedni</a></div><div class="ttdeci">struct wierzcholek * poprzedni</div><div class="ttdoc">Poprzedni wierzcholek.</div><div class="ttdef"><b>Definition:</b> Struktury.h:22</div></div>
+<div class="ttc" id="astructwierzcholek_html_ad7ee7579fcfe12b8265bd34634d80c12"><div class="ttname"><a href="structwierzcholek.html#ad7ee7579fcfe12b8265bd34634d80c12">wierzcholek::nazwa</a></div><div class="ttdeci">char * nazwa</div><div class="ttdoc">Nazwa wierzcholka, np. A1.</div><div class="ttdef"><b>Definition:</b> Struktury.h:19</div></div>
+<div class="ttc" id="astructpolaczenie_html_a38c454804c136786e91b77de508928df"><div class="ttname"><a href="structpolaczenie.html#a38c454804c136786e91b77de508928df">polaczenie::odleglosc</a></div><div class="ttdeci">int odleglosc</div><div class="ttdoc">Odleglosc wierzcholka (do ktorego nalezy ta lista polaczen) od wierzcholka bedacego obecnym elementem...</div><div class="ttdef"><b>Definition:</b> Struktury.h:10</div></div>
+<div class="ttc" id="astructwierzcholek_html_a110fbb914fa18903a88f06bec3a111ae"><div class="ttname"><a href="structwierzcholek.html#a110fbb914fa18903a88f06bec3a111ae">wierzcholek::polaczenie</a></div><div class="ttdeci">struct polaczenie * polaczenie</div><div class="ttdoc">Lista jednokierunkowa polaczen z danego wierzcholka.</div><div class="ttdef"><b>Definition:</b> Struktury.h:24</div></div>
+<div class="ttc" id="astructwierzcholek_html"><div class="ttname"><a href="structwierzcholek.html">wierzcholek</a></div><div class="ttdef"><b>Definition:</b> Struktury.h:18</div></div>
+<div class="ttc" id="astructwierzcholek_html_aa62f105efa2e343b5a68ff17c6abc441"><div class="ttname"><a href="structwierzcholek.html#aa62f105efa2e343b5a68ff17c6abc441">wierzcholek::nastepny</a></div><div class="ttdeci">struct wierzcholek * nastepny</div><div class="ttdoc">Nastepny wierzcholek.</div><div class="ttdef"><b>Definition:</b> Struktury.h:23</div></div>
+<div class="ttc" id="astructpolaczenie_html_a2f203c724e50601342dba15858452930"><div class="ttname"><a href="structpolaczenie.html#a2f203c724e50601342dba15858452930">polaczenie::wierzcholekPolaczony</a></div><div class="ttdeci">struct wierzcholek * wierzcholekPolaczony</div><div class="ttdoc">Wskaznik na wierzcholek, do ktorego prowadzi to polaczenie.</div><div class="ttdef"><b>Definition:</b> Struktury.h:11</div></div>
+<div class="ttc" id="astructwierzcholek_html_a636f294b3ecdd36944a87e1d300d2410"><div class="ttname"><a href="structwierzcholek.html#a636f294b3ecdd36944a87e1d300d2410">wierzcholek::odwiedzony</a></div><div class="ttdeci">bool odwiedzony</div><div class="ttdoc">Czy wierzcholek byl juz odwiedzony - ta zmienna potrzebna nam jest do algorytmu Dijkstry.</div><div class="ttdef"><b>Definition:</b> Struktury.h:20</div></div>
+<div class="ttc" id="astructpolaczenie_html_a1b15001b84f5a5f0b59d104a6a89ff02"><div class="ttname"><a href="structpolaczenie.html#a1b15001b84f5a5f0b59d104a6a89ff02">polaczenie::nastepnePolaczenie</a></div><div class="ttdeci">struct polaczenie * nastepnePolaczenie</div><div class="ttdoc">Nastepny element listy polaczen.</div><div class="ttdef"><b>Definition:</b> Struktury.h:12</div></div>
+<div class="ttc" id="astructwierzcholek_html_a28df3ceba73b6288f21d22c225073e08"><div class="ttname"><a href="structwierzcholek.html#a28df3ceba73b6288f21d22c225073e08">wierzcholek::koszt</a></div><div class="ttdeci">int koszt</div><div class="ttdoc">Koszt poruszenia sie do wierzcholka - ta zmienna potrzebna nam jest do algorytmu Dijkstry.</div><div class="ttdef"><b>Definition:</b> Struktury.h:21</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Wygenerowano przez&#160;<a href="http://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.8.20
+</small></address>
+</body>
+</html>
