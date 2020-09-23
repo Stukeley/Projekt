@@ -24,7 +24,6 @@
 */
 var menudata={children:[
 {text:"Strona główna",url:"index.html"},
-{text:"Dodatkowe strony",url:"pages.html"},
 {text:"Struktury Danych",url:"annotated.html",children:[
 {text:"Struktury danych",url:"annotated.html"},
 {text:"Indeks struktur danych",url:"classes.html"},

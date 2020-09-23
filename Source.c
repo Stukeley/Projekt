@@ -36,8 +36,11 @@ int main(int argc, char* argv[])
 					break;
 				}
 
-				listaWierzcholkow = strcat(listaWierzcholkow, temp2);
-				listaWierzcholkow = strcat(listaWierzcholkow, ",");
+				if (listaWierzcholkow != NULL)
+				{
+					listaWierzcholkow = strcat(listaWierzcholkow, temp2);
+					listaWierzcholkow = strcat(listaWierzcholkow, ",");
+				}
 			}
 		}
 	}
@@ -47,11 +50,16 @@ int main(int argc, char* argv[])
 		printf("Nie podano pliku wejsciowego i/lub wyjsciowego!");
 	}
 
+	// Czyszczenie pliku wyjsciowego - zeby przy wielu uruchomieniach programu nie nadpisywac go caly czas
+	wyczyscPlikWyjsciowy(wyjscie);
+
 	int ileWierzcholkow = iloscWierzcholkow(wejscie);
 	int ilePolaczen = iloscPolaczen(wejscie);
 
 	char* wierzcholki = wczytajWierzcholki(wejscie);
 	char* polaczenia = wczytajPolaczenia(wejscie);
+
+	printf("Poprawnie wczytano wierzcholki i polaczenia z pliku wejsciowego.\n\n");
 
 	// Odpowiedzialny za wyciaganie odpowiednich wierzcholkow wejsciowych z napisu listaWierzcholkow
 	int indeksListy = 0;
@@ -61,16 +69,25 @@ int main(int argc, char* argv[])
 
 	while (true)
 	{
+		if (listaWierzcholkow == NULL)
+		{
+			printf("Lista wierzcholkow nie zostala wczytana poprawnie (przelacznik -n).");
+			break;
+		}
+
 		if (listaWierzcholkow[indeksListy] == ',')
 		{
 			indeksListy++;
 			obecnyWierzcholek[i] = '\0';
 			i = 0;
 
-			char* nieSasiaduja = wierzcholkiNieSasiadujace(wierzcholki, polaczenia, obecnyWierzcholek);
+			char* pozostale = wierzcholkiPozostale(wierzcholki, obecnyWierzcholek);
+
+			printf("Dla wierzcholka %s : \n\n", obecnyWierzcholek);
 
 			// Wywolanie algorytmu Dijkstry
-			wywolajDlaWszystkich(obecnyWierzcholek, nieSasiaduja, wejscie, wyjscie);
+			wywolajDlaWszystkich(obecnyWierzcholek, pozostale, wejscie, wyjscie);
+			printf("Wywolano dla wszystkich wierzcholkow rozpoczynajac od %s\n\n", obecnyWierzcholek);
 		}
 		else if (listaWierzcholkow[indeksListy] == '\0')
 		{
@@ -85,4 +102,8 @@ int main(int argc, char* argv[])
 	// Zwalnianie pamieci potrzebnej na napisy
 	free(wierzcholki);
 	free(polaczenia);
+
+	printf("Zwolniono pamiec przeznaczona na napisy.\n");
+
+	printf("Zakonczono dzialanie programu.\n");
 }

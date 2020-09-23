@@ -1,0 +1,62 @@
+\begin{theindex}
+
+  \item {dijkstra}
+    \subitem {Funkcje.h}, 7
+
+  \indexspace
+
+  \item {Funkcje.h}, 7
+    \subitem {dijkstra}, 7
+    \subitem {iloscPolaczen}, 8
+    \subitem {iloscWierzcholkow}, 8
+    \subitem {inicjalizacja}, 9
+    \subitem {wczytajPolaczenia}, 9
+    \subitem {wczytajWierzcholki}, 10
+    \subitem {wierzcholkiPozostale}, 10
+    \subitem {wyczyscPlikWyjsciowy}, 10
+    \subitem {wywolajDlaWszystkich}, 11
+    \subitem {zapiszNaglowekDoPliku}, 11
+    \subitem {zapiszSciezkeDoPliku}, 12
+    \subitem {zwolnijPamiecListy}, 12
+
+  \indexspace
+
+  \item {iloscPolaczen}
+    \subitem {Funkcje.h}, 8
+  \item {iloscWierzcholkow}
+    \subitem {Funkcje.h}, 8
+  \item {inicjalizacja}
+    \subitem {Funkcje.h}, 9
+
+  \indexspace
+
+  \item {polaczenie}, 5
+
+  \indexspace
+
+  \item {Struktury.h}, 12
+
+  \indexspace
+
+  \item {wczytajPolaczenia}
+    \subitem {Funkcje.h}, 9
+  \item {wczytajWierzcholki}
+    \subitem {Funkcje.h}, 10
+  \item {wierzcholek}, 5
+  \item {wierzcholkiPozostale}
+    \subitem {Funkcje.h}, 10
+  \item {wyczyscPlikWyjsciowy}
+    \subitem {Funkcje.h}, 10
+  \item {wywolajDlaWszystkich}
+    \subitem {Funkcje.h}, 11
+
+  \indexspace
+
+  \item {zapiszNaglowekDoPliku}
+    \subitem {Funkcje.h}, 11
+  \item {zapiszSciezkeDoPliku}
+    \subitem {Funkcje.h}, 12
+  \item {zwolnijPamiecListy}
+    \subitem {Funkcje.h}, 12
+
+\end{theindex}

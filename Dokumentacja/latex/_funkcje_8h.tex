@@ -16,28 +16,30 @@ int \textbf{ ilosc\+Wierzcholkow} (char $\ast$nazwa\+Pliku)
 \item 
 int \textbf{ ilosc\+Polaczen} (char $\ast$nazwa\+Pliku)
 \item 
-char $\ast$ \textbf{ wierzcholki\+Nie\+Sasiadujace} (char $\ast$wierzcholki, char $\ast$polaczenia, char $\ast$wierzcholek\+Poczatkowy)
+char $\ast$ \textbf{ wierzcholki\+Pozostale} (char $\ast$wierzcholki, char $\ast$wierzcholek\+Poczatkowy)
 \item 
 void \textbf{ zapisz\+Naglowek\+Do\+Pliku} (char $\ast$wyjscie, char $\ast$wierzcholek\+Poczatkowy)
 \item 
-void \textbf{ zapisz\+Sciezke\+Do\+Pliku} (char $\ast$wyjscie, char $\ast$sciezka, int laczny\+Koszt)
+void \textbf{ zapisz\+Sciezke\+Do\+Pliku} (char $\ast$wyjscie, char $\ast$sciezka, float laczny\+Koszt)
+\item 
+void \textbf{ wyczysc\+Plik\+Wyjsciowy} (char $\ast$wyjscie)
 \item 
 struct \textbf{ wierzcholek} $\ast$ \textbf{ inicjalizacja} (char $\ast$nazwa\+Pliku, char $\ast$wierzcholek\+Poczatkowy)
 \item 
-void \textbf{ wywolaj\+Dla\+Wszystkich} (char $\ast$wierzcholek\+Poczatkowy, char $\ast$nie\+Sasiaduja, char $\ast$wejscie, char $\ast$wyjscie)
+void \textbf{ wywolaj\+Dla\+Wszystkich} (char $\ast$wierzcholek\+Poczatkowy, char $\ast$pozostale, char $\ast$wejscie, char $\ast$wyjscie)
 \item 
-void \textbf{ dijkstra} (struct \textbf{ wierzcholek} $\ast$head, int ile\+Wierzcholkow, int ile\+Polaczen, char $\ast$wierzcholek\+Poczatkowy, char $\ast$wierzcholek\+Docelowy, char $\ast$wyjscie)
+int \textbf{ dijkstra} (struct \textbf{ wierzcholek} $\ast$head, int ile\+Wierzcholkow, int ile\+Polaczen, char $\ast$wierzcholek\+Poczatkowy, char $\ast$wierzcholek\+Docelowy)
 \item 
 void \textbf{ zwolnij\+Pamiec\+Listy} (struct \textbf{ wierzcholek} $\ast$head)
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Dokumentacja funkcji}
-\mbox{\label{_funkcje_8h_a0a3505842fbfaf9c62cab6d06a0c11e9}} 
+\mbox{\label{_funkcje_8h_a71bd51dfbcb4dd27a155b0872ffd30fc}} 
 \index{Funkcje.h@{Funkcje.h}!dijkstra@{dijkstra}}
 \index{dijkstra@{dijkstra}!Funkcje.h@{Funkcje.h}}
 \doxysubsubsection{dijkstra()}
-{\footnotesize\ttfamily void dijkstra (\begin{DoxyParamCaption}\item[{struct \textbf{ wierzcholek} $\ast$}]{head,  }\item[{int}]{ile\+Wierzcholkow,  }\item[{int}]{ile\+Polaczen,  }\item[{char $\ast$}]{wierzcholek\+Poczatkowy,  }\item[{char $\ast$}]{wierzcholek\+Docelowy,  }\item[{char $\ast$}]{wyjscie }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int dijkstra (\begin{DoxyParamCaption}\item[{struct \textbf{ wierzcholek} $\ast$}]{head,  }\item[{int}]{ile\+Wierzcholkow,  }\item[{int}]{ile\+Polaczen,  }\item[{char $\ast$}]{wierzcholek\+Poczatkowy,  }\item[{char $\ast$}]{wierzcholek\+Docelowy }\end{DoxyParamCaption})}
 
 Wykorzystujac algorytm Dijkstry wyznacza najbardziej korzystne drogi z jednego wierzcholka do drugiego 
 \begin{DoxyParams}{Parametry}
@@ -51,13 +53,12 @@ Wykorzystujac algorytm Dijkstry wyznacza najbardziej korzystne drogi z jednego w
 \hline
 {\em wierzcholek\+Docelowy} & Nazwa wierzcholka, do ktorego chcemy sie poruszyc (np. D1) \\
 \hline
-{\em wyjscie} & Napis zawierajacy nazwe pliku wyjsciowego \\
-\hline
 \end{DoxyParams}
+\begin{DoxyReturn}{Zwraca}
+Koszt poruszenia sie z wierzcholka poczatkowego do docelowego (np. 5) 
+\end{DoxyReturn}
 \begin{DoxyNote}{Nota}
 Funkcja jest wywolywana dla par wierzcholkow przez funkcje \char`\"{}wywolaj\+Dla\+Wszystkich\char`\"{} 
-
-Funkcja zapisuje sciezke wraz z kosztem do pliku wyjsciowego 
 \end{DoxyNote}
 \mbox{\label{_funkcje_8h_a9bc29a30544c1f6933313f18ea77da23}} 
 \index{Funkcje.h@{Funkcje.h}!iloscPolaczen@{iloscPolaczen}}
@@ -91,7 +92,7 @@ Zlicza ilosc wierzcholkow w pliku (tylko pierwszy element w kazdym wierszu)
 Ilosc wierzcholkow w pliku wejsciowym 
 \end{DoxyReturn}
 \begin{DoxyNote}{Nota}
-Uznajemy, ze kazda linia zawiera opis jednego wierzcholka 
+Uznajemy, ze kazda linia zawiera opis jednego wierzcholka (puste linie sa pomijane) 
 \end{DoxyNote}
 \mbox{\label{_funkcje_8h_afef9543472de0443e2d850f640a49d98}} 
 \index{Funkcje.h@{Funkcje.h}!inicjalizacja@{inicjalizacja}}
@@ -137,38 +138,52 @@ Wczytuje wierzcholki z pliku wejsciowego o podanej nazwie jako jeden napis
 \begin{DoxyReturn}{Zwraca}
 Napis zawierajacy wszystkie wierzcholki oddzielone przecinkami, np. A1,B1,C1,D1 
 \end{DoxyReturn}
-\mbox{\label{_funkcje_8h_ae25742d6e39b5531f3e30b8289ad5032}} 
-\index{Funkcje.h@{Funkcje.h}!wierzcholkiNieSasiadujace@{wierzcholkiNieSasiadujace}}
-\index{wierzcholkiNieSasiadujace@{wierzcholkiNieSasiadujace}!Funkcje.h@{Funkcje.h}}
-\doxysubsubsection{wierzcholkiNieSasiadujace()}
-{\footnotesize\ttfamily char$\ast$ wierzcholki\+Nie\+Sasiadujace (\begin{DoxyParamCaption}\item[{char $\ast$}]{wierzcholki,  }\item[{char $\ast$}]{polaczenia,  }\item[{char $\ast$}]{wierzcholek\+Poczatkowy }\end{DoxyParamCaption})}
+\mbox{\label{_funkcje_8h_a59de8d36c387e7b43e26ec46f0c8bdec}} 
+\index{Funkcje.h@{Funkcje.h}!wierzcholkiPozostale@{wierzcholkiPozostale}}
+\index{wierzcholkiPozostale@{wierzcholkiPozostale}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{wierzcholkiPozostale()}
+{\footnotesize\ttfamily char$\ast$ wierzcholki\+Pozostale (\begin{DoxyParamCaption}\item[{char $\ast$}]{wierzcholki,  }\item[{char $\ast$}]{wierzcholek\+Poczatkowy }\end{DoxyParamCaption})}
 
-Zwraca napis zawierajacy wszystkie nazwy wierzcholkow, ktore nie sasiaduja z danym wierzcholkiem poczatkowym 
+Zwraca napis zawierajacy wszystkie nazwy wierzcholkow oprocz wierzcholka poczatkowego, podanego jako parametr 
 \begin{DoxyParams}{Parametry}
 {\em wierzcholki} & Napis zawierajacy wierzcholki wczytane z pliku (zwrocony przez funkcje \char`\"{}wczytaj\+Wierzcholki\char`\"{}) \\
 \hline
-{\em polaczenia} & Napis zawierajacy polaczenia wczytane z pliku (zwrocony przez funkcje \char`\"{}wczytaj\+Polaczenia\char`\"{}) \\
-\hline
-{\em wierzcholek\+Poczatkowy} & Napis zawierajacy nazwe wierzcholka poczatkowego (od ktorego zaczynamy szukac sciezki do kolejnych) @retun Napis zawierajacy wszystkie wierzcholki, ktore nie sasiaduja z podanym wierzcholkiem poczatkowym, oddzielone przecinkami, np. D1,E1,F1 \\
+{\em wierzcholek\+Poczatkowy} & Napis zawierajacy nazwe wierzcholka poczatkowego (od ktorego zaczynamy szukac sciezki do kolejnych) @retun Napis zawierajacy wszystkie wierzcholki oprocz poczatkowego, oddzielone przecinkami, np. B1,C1,D1,E1,F1 \\
 \hline
 \end{DoxyParams}
-co dla kosztu?\mbox{\label{_funkcje_8h_a11dd340c1d6b2a77beeed9c1e635852d}} 
+\mbox{\label{_funkcje_8h_a63c6d3ac0e6c69aee84a3c172464d1fc}} 
+\index{Funkcje.h@{Funkcje.h}!wyczyscPlikWyjsciowy@{wyczyscPlikWyjsciowy}}
+\index{wyczyscPlikWyjsciowy@{wyczyscPlikWyjsciowy}!Funkcje.h@{Funkcje.h}}
+\doxysubsubsection{wyczyscPlikWyjsciowy()}
+{\footnotesize\ttfamily void wyczysc\+Plik\+Wyjsciowy (\begin{DoxyParamCaption}\item[{char $\ast$}]{wyjscie }\end{DoxyParamCaption})}
+
+Czysci plik wyjsciowy, tak by przy kazdym uruchomieniu programu znajdowaly sie w nim tylko obecne dane wyjsciowe 
+\begin{DoxyParams}{Parametry}
+{\em wyjscie} & Napis zawierajacy nazwe pliku wyjsciowego \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Nota}
+Funkcja otwiera plik wyjsciowy z przelacznikiem \char`\"{}w\char`\"{}, co usuwa cala jego zawartosc. Jesli plik nie istnieje, zostanie stowrzony (i rowniez bedzie pusty) 
+\end{DoxyNote}
+\mbox{\label{_funkcje_8h_abf338cb65cab56037be8cadaf0fb0dfd}} 
 \index{Funkcje.h@{Funkcje.h}!wywolajDlaWszystkich@{wywolajDlaWszystkich}}
 \index{wywolajDlaWszystkich@{wywolajDlaWszystkich}!Funkcje.h@{Funkcje.h}}
 \doxysubsubsection{wywolajDlaWszystkich()}
-{\footnotesize\ttfamily void wywolaj\+Dla\+Wszystkich (\begin{DoxyParamCaption}\item[{char $\ast$}]{wierzcholek\+Poczatkowy,  }\item[{char $\ast$}]{nie\+Sasiaduja,  }\item[{char $\ast$}]{wejscie,  }\item[{char $\ast$}]{wyjscie }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void wywolaj\+Dla\+Wszystkich (\begin{DoxyParamCaption}\item[{char $\ast$}]{wierzcholek\+Poczatkowy,  }\item[{char $\ast$}]{pozostale,  }\item[{char $\ast$}]{wejscie,  }\item[{char $\ast$}]{wyjscie }\end{DoxyParamCaption})}
 
-Wywoluje algorytm Dijkstry (funkcja \char`\"{}dijkstra\char`\"{}) dla wszystkich wierzcholkow, ktore nie sasiaduja z wierzcholkiem poczatkowym, podanym jako parametr 
+Wywoluje algorytm Dijkstry (funkcja \char`\"{}dijkstra\char`\"{}) dla wszystkich wierzcholkow oprocz wierzcholka poczatkowego, podanego jako parametr 
 \begin{DoxyParams}{Parametry}
 {\em wierzcholek\+Poczatkowy} & Wierzcholek, dla ktorego bedziemy wywolywac algorytm \\
 \hline
-{\em nie\+Sasiaduja} & Napis zawierajacy wierzcholki, ktore nie sasiaduja z wierzcholkiem poczatkowym (zwrocony przez funkcje \char`\"{}wierzcholki\+Nie\+Sasiadujace\char`\"{}) \\
+{\em pozostale} & Napis zawierajacy wierzcholki pozostale (wszystkie poza poczatkowym -\/ zwrocony przez funkcje wierzcholki\+Pozostale) \\
 \hline
 {\em wyjscie} & Napis zawierajacy nazwe pliku wyjsciowego \\
 \hline
 \end{DoxyParams}
 \begin{DoxyNote}{Nota}
-Ta funkcja wykona algorytm Dijkstry dla wierzcholka poczatkowego oraz kazdego wierzcholka zawartego w napisie \char`\"{}nie\+Sasiaduja\char`\"{} 
+Ta funkcja wykona algorytm Dijkstry dla wierzcholka poczatkowego oraz kazdego wierzcholka zawartego w napisie \char`\"{}pozostale\char`\"{} 
+
+Funkcja zapisuje do pliku wyjsciowego wyniki dzialania algorytmu (sciezki wraz ze srednimi kosztami) 
 \end{DoxyNote}
 \mbox{\label{_funkcje_8h_a6cd6c270646acb6d469970f6ca24f4b3}} 
 \index{Funkcje.h@{Funkcje.h}!zapiszNaglowekDoPliku@{zapiszNaglowekDoPliku}}
@@ -185,22 +200,20 @@ Zapisuje naglowek do pliku wyjsciowego (aby format byl zgodny z poleceniem)
 \end{DoxyParams}
 \begin{DoxyNote}{Nota}
 Funkcja zapisze do pliku napis np. \char`\"{}dla wierzcholka A1\char`\"{} 
-
-Funkcja tworzy plik wyjsciowy, jesli nie istnieje 
 \end{DoxyNote}
-\mbox{\label{_funkcje_8h_a3f5290d0c21c063d353323cbe6d6d91a}} 
+\mbox{\label{_funkcje_8h_a65747b691fbdd25aa1eb2773ef1f6f19}} 
 \index{Funkcje.h@{Funkcje.h}!zapiszSciezkeDoPliku@{zapiszSciezkeDoPliku}}
 \index{zapiszSciezkeDoPliku@{zapiszSciezkeDoPliku}!Funkcje.h@{Funkcje.h}}
 \doxysubsubsection{zapiszSciezkeDoPliku()}
-{\footnotesize\ttfamily void zapisz\+Sciezke\+Do\+Pliku (\begin{DoxyParamCaption}\item[{char $\ast$}]{wyjscie,  }\item[{char $\ast$}]{sciezka,  }\item[{int}]{laczny\+Koszt }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void zapisz\+Sciezke\+Do\+Pliku (\begin{DoxyParamCaption}\item[{char $\ast$}]{wyjscie,  }\item[{char $\ast$}]{sciezka,  }\item[{float}]{laczny\+Koszt }\end{DoxyParamCaption})}
 
 Wypisuje do pliku wyjsciowego o podanej nazwie sciezke oraz laczny koszt 
 \begin{DoxyParams}{Parametry}
 {\em wyjscie} & Napis zawierajacy nazwe pliku wyjsciowego \\
 \hline
-{\em sciezka} & Napis zawierajacy sciezke do wierzcholka docelowego, w nastepujacym formacie\+: D$<$-\/W1$<$-\/W2$<$-\/...$<$-\/P \\
+{\em sciezka} & Napis zawierajacy sciezke do wierzcholka docelowego, w nastepujacym formacie\+: do W1 przez (W2) \+: koszt \\
 \hline
-{\em laczny\+Koszt} & Laczny koszt dla tej sciezki \\
+{\em laczny\+Koszt} & Laczny koszt dla tej sciezki (moze nie byc calkowity) \\
 \hline
 \end{DoxyParams}
 \mbox{\label{_funkcje_8h_a90109a72d09acce046a27bb541927a93}} 

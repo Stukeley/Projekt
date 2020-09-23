@@ -1,11 +1,10 @@
 var indexSectionsWithContent =
 {
-  0: "dfiknopstwz",
+  0: "dfiknopswz",
   1: "pw",
   2: "fs",
   3: "diwz",
-  4: "knopw",
-  5: "t"
+  4: "knopw"
 };
 
 var indexSectionNames =
@@ -14,8 +13,7 @@ var indexSectionNames =
   1: "classes",
   2: "files",
   3: "functions",
-  4: "variables",
-  5: "pages"
+  4: "variables"
 };
 
 var indexSectionLabels =
@@ -24,7 +22,6 @@ var indexSectionLabels =
   1: "Struktury Danych",
   2: "Pliki",
   3: "Funkcje",
-  4: "Zmienne",
-  5: "Strony"
+  4: "Zmienne"
 };
 

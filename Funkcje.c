@@ -7,29 +7,34 @@ int iloscWierzcholkow(char* nazwaPliku)
 	if (plik == NULL)
 	{
 		printf("Nie znalzeiono pliku wejsciowego!");
-		return NULL;
+		return 0;
 	}
 
-	int ilosc = 1;
+	int ilosc = 0;
 
 	// Buffer dla funkcji getc
 	char str[60];
 
-	// Obecny znak
-	char znak;
+	// Kazda linia w pliku wejsciowym to jeden wierzcholek - oprocz pustych linii
 
-	// Kazda linia w pliku wejsciowym to jeden wierzcholek
-
-	znak = getc(plik);
-
-	while (znak != EOF)
+	while (true)
 	{
-		if (znak == '\n')
+		// Obecna linia
+		char* linia = fgets(str, 60, plik);
+
+		if (linia == NULL)
 		{
-			ilosc++;
+			// Koniec pliku
+			break;
 		}
 
-		znak = getc(plik);
+		// Jezeli linia zawiera tylko znak konca napisu albo znak nowej linii, nie liczymy jej (pusta linia)
+		if (linia[0] == '\0' || linia[0] == '\n')
+		{
+			continue;
+		}
+
+		ilosc++;
 	}
 
 	fclose(plik);
@@ -46,7 +51,7 @@ int iloscPolaczen(char* nazwaPliku)
 	if (plik == NULL)
 	{
 		printf("Nie znalzeiono pliku wejsciowego!");
-		return NULL;
+		return 0;
 	}
 
 	int iloscPol = 0;
@@ -59,6 +64,13 @@ int iloscPolaczen(char* nazwaPliku)
 	for (int i = 0; i < iloscWierzch; i++)
 	{
 		char* linia = fgets(str, 60, plik);
+
+		// Sprawdzamy czy linia nie jest pusta - jesli jest (czyli zawiera tylko znak konca napisu albo tylko znak nowej linii), idziemy dalej
+		if (linia[0] == '\0' || linia[0] == '\n')
+		{
+			i--;
+			continue;
+		}
 
 		for (int j = 0; j < strlen(linia); j++)
 		{
@@ -74,125 +86,38 @@ int iloscPolaczen(char* nazwaPliku)
 	return iloscPol;
 }
 
-char* wierzcholkiNieSasiadujace(char* wierzcholki, char* polaczenia, char* wierzcholekPoczatkowy)
+char* wierzcholkiPozostale(char* wierzcholki, char* wierzcholekPoczatkowy)
 {
-	char* sasiaduja = (char*)calloc(60, sizeof(char));
+	char* pozostale = (char*)calloc(60, sizeof(char));
 
-	// Sprawdzamy kazde polaczenie, czy jeden z polaczonych wierzcholkow to wierzcholekPoczatkowy - jesli tak, dodajemy je do "sasiaduja". Pozostale dodajemy do "nieSasiaduja"
-	// Uznajemy, ze wierzcholek poczatkowy sasiaduje sam ze soba (nie ma to wplywu na algorytm, a tylko ulatwi zwracanie poprawnej wartosci)
+	// Kopiujemy wierzcholki poza poczatkowym i zwracamy napis
 
-	sasiaduja = strcat(sasiaduja, wierzcholekPoczatkowy);
-	sasiaduja = strcat(sasiaduja, ",");
-
-	int indeksPolaczen = 0;
+	char wierzcholek[3];
 	int i = 0;
-	int j = 0;
-	char W1[3];
-	char W2[3];
 
-	while (true)
+	while (wierzcholki[i] != '\0')
 	{
-		// A1_B1_1,A1_C1_4,B1_C1_...,
+		wierzcholek[0] = wierzcholki[i++];
+		wierzcholek[1] = wierzcholki[i++];
+		wierzcholek[2]='\0';
+		i++;
 
-		if (polaczenia[indeksPolaczen] == '\0')
+		if (strcmp(wierzcholek, wierzcholekPoczatkowy) == 0)
 		{
-			// Koniec napisu
-
-			break;
-		}
-		else if (polaczenia[indeksPolaczen] == ',')
-		{
-			indeksPolaczen++;
-			// Nastepne polaczenie
-
-			i = 0;
-			j = 0;
-
-			W1[0] = ' ';
-			W1[1] = ' ';
-			W1[2] = ' ';
-
-			W2[0] = ' ';
-			W2[1] = ' ';
-			W2[2] = ' ';
-		}
-		else if (polaczenia[indeksPolaczen] == '_')
-		{
-			//! co dla kosztu?
-
-			if (polaczenia[++indeksPolaczen] >= 48 && polaczenia[indeksPolaczen] <= 57)
-			{
-				// Liczba(koszt) - pomijamy i idziemy dalej
-				continue;
-			}
-
-			W1[i] = '\0';
-
-			while (polaczenia[indeksPolaczen] != '_')
-			{
-				W2[j++] = polaczenia[indeksPolaczen++];
-			}
-
-			W2[j] = '\0';
-
-			if (strcmp(wierzcholekPoczatkowy, W1) == 0)
-			{
-				// W2 jest sasiadem
-				sasiaduja = strcat(sasiaduja, W2);
-				sasiaduja = strcat(sasiaduja, ",");
-			}
-			else if (strcmp(wierzcholekPoczatkowy, W2) == 0)
-			{
-				// W1 jest sasiadem
-				sasiaduja = strcat(sasiaduja, W1);
-				sasiaduja = strcat(sasiaduja, ",");
-			}
-
-			i = 0;
-			j = 0;
+			// Znalezlismy wierzcholek poczatkowy - nie kopiujemy go
+			continue;
 		}
 		else
 		{
-			W1[i++] = polaczenia[indeksPolaczen++];
-		}
-	}
-
-	// Dla kazdego wierzcholka sprawdzamy, czy napis "sasiaduja" zawiera ten wierzcholek; jesli nie, dodajemy go do napisu "nieSasiaduja"
-
-	// Wartosc zwracana
-	char* nieSasiaduja = (char*)calloc(60, sizeof(char));
-
-	int indeksWierzcholkow = 0;
-	i = 0;
-
-	while (true)
-	{
-		if (wierzcholki[indeksWierzcholkow] == '\0')
-		{
-			break;
-		}
-		else if (wierzcholki[indeksWierzcholkow] == ',')
-		{
-			indeksWierzcholkow++;
-
-			W1[i] = '\0';
-			i = 0;
-
-			if (strstr(sasiaduja, W1) == NULL)
+			if (pozostale != NULL)
 			{
-				// "sasiaduja" nie zawiera W1 - czyli nie jest on sasiadem wierzcholka poczatkowego
-				nieSasiaduja = strcat(nieSasiaduja, W1);
-				nieSasiaduja = strcat(nieSasiaduja, ",");
+				pozostale = strcat(pozostale, wierzcholek);
+				pozostale = strcat(pozostale, ",");
 			}
 		}
-		else
-		{
-			W1[i++] = wierzcholki[indeksWierzcholkow++];
-		}
 	}
 
-	// Powinno zwrocic np. D1,E1,F1,
-	return nieSasiaduja;
+	return pozostale;
 }
 
 char* wczytajWierzcholki(char* nazwaPliku)
@@ -204,7 +129,7 @@ char* wczytajWierzcholki(char* nazwaPliku)
 	if (plik == NULL)
 	{
 		printf("Nie znalzeiono pliku wejsciowego!");
-		return NULL;
+		return "";
 	}
 
 	// Tworzenie napisu wyjsciowego o rozmiarze 3 * ilosc + 1 (kazdy wierzcholek to 2 znaki + przecinek + jeden znak konca napisu)
@@ -220,6 +145,13 @@ char* wczytajWierzcholki(char* nazwaPliku)
 	for (int i = 0; i < ilosc; i++)
 	{
 		char* linia = fgets(str, 60, plik);
+
+		// Sprawdzamy czy linia nie jest pusta - jesli jest (czyli zawiera tylko znak konca napisu albo tylko znak nowej linii), idziemy dalej
+		if (linia[0] == '\0' || linia[0]=='\n')
+		{
+			i--;
+			continue;
+		}
 
 		// Wczytujemy z pliku tylko nazwe wierzcholka, np. A1
 		char* nazwaW = strtok(linia, ":");
@@ -247,7 +179,7 @@ char* wczytajPolaczenia(char* nazwaPliku)
 	if (plik == NULL)
 	{
 		printf("Nie znalzeiono pliku wejsciowego!");
-		return NULL;
+		return "";
 	}
 
 	// Tworzenie napisu wyjsciowego o rozmiarze 13 * ilosc + 1 (2 wierzcholki * 2 znaki + 4 cyfry kosztu + 2 podkreslenia + przecinek na kazde polaczenie + jeden znak konca napisu)
@@ -264,14 +196,21 @@ char* wczytajPolaczenia(char* nazwaPliku)
 	{
 		char* linia = fgets(str, 60, plik);
 
-		char* tempLinia = (char*)malloc(60*sizeof(char));
+		// Sprawdzamy czy linia nie jest pusta - jesli jest (czyli zawiera tylko znak konca napisu albo tylko znak nowej linii), idziemy dalej
+		if (linia[0] == '\0' || linia[0] == '\n')
+		{
+			i--;
+			continue;
+		}
+
+		char* tempLinia = (char*)malloc(60 * sizeof(char));
 
 		strcpy(tempLinia, linia);
 
 		// Naglowek linii - pierwszy wierzcholek polaczony ("first")
 		char* pierwszy = strtok(tempLinia, ":");
 
-		int rozmiarLinii = strlen(linia);
+		size_t rozmiarLinii = strlen(linia);
 
 		for (int j = 0; j < rozmiarLinii; j++)
 		{
@@ -281,7 +220,7 @@ char* wczytajPolaczenia(char* nazwaPliku)
 				char drugi[3];
 				drugi[0] = linia[j + 1];
 				drugi[1] = linia[j + 2];
-				
+
 				// Zakldamy ze koszt to maksymalnie 4-cyfrowa liczba
 				char koszt[5];
 
@@ -309,7 +248,6 @@ char* wczytajPolaczenia(char* nazwaPliku)
 				polaczenia[indeks++] = drugi[1];
 				polaczenia[indeks++] = '_';
 
-				
 				for (int s = 0; s < x; s++)
 				{
 					polaczenia[indeks++] = koszt[s];
@@ -343,7 +281,7 @@ void zapiszNaglowekDoPliku(char* wyjscie, char* wierzcholekPoczatkowy)
 	fclose(plik);
 }
 
-void zapiszSciezkeDoPliku(char* wyjscie, char* sciezka, int lacznyKoszt)
+void zapiszSciezkeDoPliku(char* wyjscie, char* sciezka, float lacznyKoszt)
 {
 	FILE* plik = fopen(wyjscie, "a");
 
@@ -353,7 +291,77 @@ void zapiszSciezkeDoPliku(char* wyjscie, char* sciezka, int lacznyKoszt)
 		return;
 	}
 
-	fprintf(plik, "%s : %d\n", sciezka, lacznyKoszt);
+	// Format sciezki wyglada tak:
+	// D2<-F2<-A1
+
+	// Format wyjsciowy wyglada tak:
+	// do B2 przez (B2) koszt 1,5
+
+	char pierwszy[3];
+	char drugi[3];
+	int i = 0;
+
+	for (int j = 0; j < 2; j++)
+	{
+		pierwszy[j] = sciezka[i++];
+
+		if (sciezka[i] == '<')
+		{
+			// Koniec wierzcholka po mniej niz 2 znakach
+			pierwszy[j + 1] = '\0';
+			break;
+		}
+	}
+
+	i += 2;
+
+	for (int j = 0; j < 2; j++)
+	{
+		drugi[j] = sciezka[i++];
+
+		if (sciezka[i] == '<')
+		{
+			// Koniec wierzcholka po mniej niz 2 znakach
+			drugi[j + 1] = '\0';
+			break;
+		}
+	}
+
+	i += 2;
+
+	// Sprawdzamy czy jest jeszcze trzeci wierzcholek
+	if (sciezka[i] == '\0')
+	{
+		// Nie ma trzeciego wierzcholka => pierwszy to docelowy, drugi to poczatkowy
+		// Format: pierwszy przez (pierwszy) koszt X
+		fprintf(plik, "do %s przez (%s) : %.2f\n", pierwszy, pierwszy, lacznyKoszt);
+
+		// Wypisujemy to samo do konsoli
+		printf("do %s przez (%s) : %.2f\n", pierwszy, pierwszy, lacznyKoszt);
+	}
+	else
+	{
+		// Jest trzeci wierzcholek => pierwszy to docelowy, drugi to posredni
+		// Format: pierwszy przez (drugi) koszt X
+		fprintf(plik, "do %s przez (%s) : %.2f\n", pierwszy, drugi, lacznyKoszt);
+
+		// Wypisujemy to samo do konsoli
+		printf("do %s przez (%s) : %.2f\n", pierwszy, drugi, lacznyKoszt);
+	}
+
+
+	fclose(plik);
+}
+
+void wyczyscPlikWyjsciowy(char* wyjscie)
+{
+	FILE* plik = fopen(wyjscie, "w");
+
+	if (plik == NULL)
+	{
+		printf("Blad przy tworzeniu pliku wyjsciowego!");
+		return;
+	}
 
 	fclose(plik);
 }
@@ -367,8 +375,8 @@ struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy)
 
 	char* polaczenia = wczytajPolaczenia(nazwaPliku);
 
-	struct wierzcholek *p, *head;
-	
+	struct wierzcholek* p, * head;
+
 	p = (struct wierzcholek*)malloc(sizeof(struct wierzcholek));
 	head = NULL;
 
@@ -403,7 +411,7 @@ struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy)
 		indeksNazwy++;
 
 		p->nazwa = (char*)malloc(3 * sizeof(char));
-		p->nazwa = strcpy(p->nazwa,&nazwaW);
+		p->nazwa = strcpy(p->nazwa, &nazwaW);
 		p->odwiedzony = false;
 		p->poprzedni = NULL;
 		p->polaczenie = NULL;
@@ -418,7 +426,6 @@ struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy)
 		{
 			p->koszt = 9999;
 		}
-		
 	}
 
 	// W tym miejscu mamy liste wierzcholkow, np. A1->B1->C1->...
@@ -471,16 +478,15 @@ struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy)
 		indeksPolaczenia++;
 		value = atoi(valueChar);
 
-
 		while (p != NULL)
 		{
-			if (strcmp(p->nazwa,first) == 0)
+			if (strcmp(p->nazwa, first) == 0)
 			{
 				if (p->polaczenie == NULL)
 				{
 					p->polaczenie = (struct polaczenie*)malloc(sizeof(struct polaczenie));
 
-					struct wierzcholek *p2 = head;
+					struct wierzcholek* p2 = head;
 
 					while (strcmp(second, p2->nazwa) != 0)
 					{
@@ -494,6 +500,9 @@ struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy)
 				}
 				else
 				{
+					// tu tracimy wierzcholek - jakis temp?
+					struct polaczenie* tempPolaczenie = p->polaczenie;
+
 					while (p->polaczenie->nastepnePolaczenie != NULL)
 					{
 						p->polaczenie = p->polaczenie->nastepnePolaczenie;
@@ -511,6 +520,8 @@ struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy)
 					p->polaczenie->nastepnePolaczenie->odleglosc = value;
 					p->polaczenie->nastepnePolaczenie->nastepnePolaczenie = NULL;
 
+					p->polaczenie = tempPolaczenie;
+
 					break;
 				}
 			}
@@ -519,14 +530,10 @@ struct wierzcholek* inicjalizacja(char* nazwaPliku, char* wierzcholekPoczatkowy)
 		}
 	}
 
-	// Przypisanie wartosci head to instancji Wierzcholek stworzonej w deklaracji struktury?
-	// chyba tak nie mozna? XD
-	Wierzcholek = head;
-
 	return head;
 }
 
-void wywolajDlaWszystkich(char* wierzcholekPoczatkowy, char* nieSasiaduja, char* wejscie, char* wyjscie)
+void wywolajDlaWszystkich(char* wierzcholekPoczatkowy, char* pozostale, char* wejscie, char* wyjscie)
 {
 	// Zmienne potrzebne do wywolania funkcji "dijkstra" - takie same dla kazdego wierzcholka
 	int iloscW = iloscWierzcholkow(wejscie);
@@ -543,7 +550,7 @@ void wywolajDlaWszystkich(char* wierzcholekPoczatkowy, char* nieSasiaduja, char*
 
 	while (true)
 	{
-		if (nieSasiaduja[indeksSasiadow] == ',')
+		if (pozostale[indeksSasiadow] == ',')
 		{
 			indeksSasiadow++;
 			drugiWierzcholek[i] = '\0';
@@ -553,24 +560,80 @@ void wywolajDlaWszystkich(char* wierzcholekPoczatkowy, char* nieSasiaduja, char*
 			struct wierzcholek* temp = inicjalizacja(wejscie, wierzcholekPoczatkowy);
 
 			// Wywolanie algorytmu
-			dijkstra(temp, iloscW, iloscP, wierzcholekPoczatkowy, drugiWierzcholek, wyjscie);
+			int koszt1 = dijkstra(temp, iloscW, iloscP, wierzcholekPoczatkowy, drugiWierzcholek, wyjscie);
+
+			// Sciezka do wierzcholka docelowego - poczatkowo pusta (zakladamy maksymalny rozmiar 60)
+			// Format: D<-W1<-W2<-...<-P
+			char* sciezka = (char*)calloc(60, sizeof(char));
+
+			// Odnajdujemy wierzcholek docelowy
+			struct wierzcholek* wPoczatkowy = temp;
+			struct wierzcholek* tempW = NULL;
+
+			while (wPoczatkowy != NULL)
+			{
+				if (strcmp(wPoczatkowy->nazwa, drugiWierzcholek) == 0)
+				{
+					// Znalezlismy wierzcholek docelowy, jego koszt jest lacznym kosztem
+					temp = wPoczatkowy;
+					break;
+				}
+
+				wPoczatkowy = wPoczatkowy->nastepny;
+			}
+
+			// Zapisujemy sciezke korzystajac z poprzednich wierzcholkow, w stosunku do znalezionego wyzej wierzcholka docelowego
+			while (temp != NULL)
+			{
+				if (strcmp(temp->nazwa, wierzcholekPoczatkowy) == 0)
+				{
+					break;
+				}
+
+				if (sciezka != NULL)
+				{
+					strcat(sciezka, temp->nazwa);
+					strcat(sciezka, "<-");
+				}
+
+				temp = temp->poprzedni;
+			}
+
+			if (sciezka != NULL)
+			{
+				strcat(sciezka, wierzcholekPoczatkowy);
+			}
 
 			// Zwalniamy pamiec potrzebna na liste
 			zwolnijPamiecListy(temp);
+
+			// Inicjalizacja listy na nowo, aby znalezc koszt sciezki w druga strone
+			temp = inicjalizacja(wejscie, drugiWierzcholek);
+
+			// Wywolanie algorytmu w druga strone
+			int koszt2 = dijkstra(temp, iloscW, iloscP, drugiWierzcholek, wierzcholekPoczatkowy, wyjscie);
+
+			float kosztSredni = (koszt1 + koszt2) / (float)2;
+
+			// Zapisanie sciezki i kosztu do pliku
+			zapiszSciezkeDoPliku(wyjscie, sciezka, kosztSredni);
+
+			zwolnijPamiecListy(temp);
+			printf("Zwolniono pamiec.\n\n");
 		}
-		else if (nieSasiaduja[indeksSasiadow] == '\0')
+		else if (pozostale[indeksSasiadow] == '\0')
 		{
 			// Wywolalismy dla wszystkich wierzcholkow
 			break;
 		}
 		else
 		{
-			drugiWierzcholek[i++] = nieSasiaduja[indeksSasiadow++];
+			drugiWierzcholek[i++] = pozostale[indeksSasiadow++];
 		}
 	}
 }
 
-void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy, char* wyjscie)
+int dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, char* wierzcholekPoczatkowy, char* wierzcholekDocelowy)
 {
 	// Zmienna tymczasowa, ktora bedziemy poruszac sie po liscie
 	struct wierzcholek* pp = head;
@@ -606,12 +669,15 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 
 			while (true)
 			{
-				if (pp->odwiedzony == false)
+				if (pp != NULL)
 				{
-					cel = pp;
-					break;
+					if (pp->odwiedzony == false)
+					{
+						cel = pp;
+						break;
+					}
+					pp = pp->nastepny;
 				}
-				pp = pp->nastepny;
 			}
 		}
 
@@ -657,10 +723,6 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 	// Laczny koszt aby poruszyc sie do wierzcholka docelowego
 	int lacznyKoszt = 0;
 
-	// Sciezka do wierzcholka docelowego - poczatkowo pusta (zakladamy maksymalny rozmiar 60)
-	// Format: D<-W1<-W2<-...<-P
-	char* sciezka = (char*)calloc(60, sizeof(char));
-
 	while (wPoczatkowy != NULL)
 	{
 		if (strcmp(wPoczatkowy->nazwa, wierzcholekDocelowy) == 0)
@@ -674,27 +736,7 @@ void dijkstra(struct wierzcholek* head, int ileWierzcholkow, int ilePolaczen, ch
 		wPoczatkowy = wPoczatkowy->nastepny;
 	}
 
-	// Zapisujemy sciezke korzystajac z poprzednich wierzcholkow, w stosunku do znalezionego wyzej wierzcholka docelowego
-	while (temp != NULL)
-	{
-		if (strcmp(temp->nazwa, wierzcholekPoczatkowy) == 0)
-		{
-			break;
-		}
-
-		strcat(sciezka, temp->nazwa);
-		strcat(sciezka, "<-");
-
-		temp = temp->poprzedni;
-	}
-
-	strcat(sciezka, wierzcholekPoczatkowy);
-
-	printf("Sciezka: %s\n", sciezka);
-	printf("Laczny koszt : %d\n", lacznyKoszt);
-
-	// Zapisujemy sciezke i koszt do pliku (naglowek zostal zapisany wyzej)
-	zapiszSciezkeDoPliku(wyjscie, sciezka, lacznyKoszt);
+	return lacznyKoszt;
 }
 
 void zwolnijPamiecListy(struct wierzcholek* head)
@@ -715,6 +757,4 @@ void zwolnijPamiecListy(struct wierzcholek* head)
 
 		head = nextW;
 	}
-
-	printf("Zwolniono pamiec!\n");
 }
